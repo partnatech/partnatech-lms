@@ -1,22 +1,21 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
+import { NextAuthProvider } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "Partnatech LMS",
-  description: "Partnatech LMS",
+  description: "Kelas online Data Engineer dan Analytics Engineer",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <NextAuthProvider>{children}</NextAuthProvider>
+      </body>
     </html>
   );
 }
