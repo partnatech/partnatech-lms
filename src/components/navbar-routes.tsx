@@ -38,7 +38,7 @@ export const NavbarRoutes = ({ user, setSidebarOpen  }: NavbarProps) => {
       <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
       <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <form className="relative flex flex-1" action="#" method="GET">
+      {/* <form className="relative flex flex-1" action="#" method="GET">
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>
@@ -53,7 +53,8 @@ export const NavbarRoutes = ({ user, setSidebarOpen  }: NavbarProps) => {
             type="search"
             name="search"
           />
-        </form>
+        </form> */}
+        <div className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" />
         <div className="flex items-center gap-x-4 lg:gap-x-6">
           <button
             type="button"
