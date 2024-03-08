@@ -92,7 +92,7 @@ export const LoginForm = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <div className="text-sm leading-6">
               <a
                 href="#"
@@ -101,7 +101,7 @@ export const LoginForm = () => {
                 Forgot password?
               </a>
             </div>
-          </div>
+          </div> */}
 
           <div>
             <button
