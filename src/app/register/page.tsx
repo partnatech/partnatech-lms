@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { RegisterForm } from "./_components/form";
 import { Suspense } from "react";
+import { Logo } from "@/components/logo";
 
 export default function RegisterPage() {
   return (
@@ -8,9 +9,7 @@ export default function RegisterPage() {
       <div className="flex min-h-full flex-1">
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
-            <div className="font-black hover:text-primary text-2xl transition-colors ease-linear duration-300">
-              PartnaLearn
-            </div>
+           <Logo />
             <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Register New Account
             </h2>
