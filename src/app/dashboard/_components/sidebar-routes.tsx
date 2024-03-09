@@ -9,19 +9,17 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { BuildingLibraryIcon } from "@heroicons/react/24/solid";
 import { LightBulbIcon } from "@heroicons/react/24/solid";
 
-const studentRoutes = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  { name: "Events", href: "/events", icon: CalendarDaysIcon, current: false },
-  { name: "Bootcamps", href: "/bootcamps", icon: AcademicCapIcon, current: false },
-  { name: "Projects", href: "/projects", icon: BuildingLibraryIcon, current: false },
-  { name: "Practices", href: "/practice", icon: ArrowTrendingUpIcon, current: false },
-  { name: "Subscribe", href: "/subscribe", icon: StarIcon, current: false },
-  { name: "Partna Learn", href: "/partnalearn", icon: LightBulbIcon, current: false },
-
-];
-
 export const SidebarRoutes = () => {
-  const routes = studentRoutes;
+  const routes = [
+    { name: "Home", href: "/dashboard", icon: HomeIcon },
+    { name: "Learn", href: "/dashboard/learn", icon: LightBulbIcon },
+    { name: "Events", href: "/events", icon: CalendarDaysIcon },
+    { name: "Bootcamps", href: "/bootcamps", icon: AcademicCapIcon },
+    { name: "Projects", href: "/projects", icon: BuildingLibraryIcon },
+    { name: "Practices", href: "/practice", icon: ArrowTrendingUpIcon },
+    { name: "Subscribe", href: "/subscribe", icon: StarIcon },
+  ];
+
   return (
     <>
       {routes.map((route) => (
