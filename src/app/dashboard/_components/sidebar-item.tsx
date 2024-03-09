@@ -24,12 +24,17 @@ export const SidebarItem = ({ menu }: SidebarItemProps) => {
       <Link
         href={menu.href}
         className={clsx(
-          isActive ? "bg-indigo-700 text-white" : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+          isActive
+            ? "bg-indigo-700 text-white"
+            : "dark:text-indigo-200 text-gray-800 hover:text-white hover:bg-indigo-700",
           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
         )}
       >
         <menu.icon
-          className={clsx(isActive ? "text-white" : "text-indigo-200 group-hover:text-white", "h-6 w-6 shrink-0")}
+          className={clsx(
+            isActive ? "text-white" : "dark:text-indigo-200 text-indigo-600 group-hover:text-white",
+            "h-6 w-6 shrink-0"
+          )}
           aria-hidden="true"
         />
         {menu.name}

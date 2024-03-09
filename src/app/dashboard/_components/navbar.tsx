@@ -14,13 +14,13 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ user }: NavbarProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
       <NavbarRoutes user={user} setSidebarOpen={setSidebarOpen} />
       <Sidebar />
-      <MobileSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
+      <MobileSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
     </>
   );
 };
