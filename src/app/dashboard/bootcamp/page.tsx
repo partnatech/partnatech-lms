@@ -65,7 +65,7 @@ const BootcampPage = () => {
           </button>
         ))}
       </div>
-
+      <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hot Promo</h3>
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {bootcampItems.map((item) => (
          <BootcampCard key={item.id} bootcamp={item}/>
