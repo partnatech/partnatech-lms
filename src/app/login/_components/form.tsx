@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertMessage } from "@/components/alert-message";
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
@@ -34,7 +35,7 @@ export const LoginForm = () => {
       if (!res?.error) {
         router.push(callbackUrl);
       } else {
-        setError("invalid email or password");
+        setError("Invalid email or password");
       }
     } catch (error: any) {
       setLoading(false);
@@ -92,17 +93,6 @@ export const LoginForm = () => {
             </div>
           </div>
 
-          {/* <div className="flex items-center justify-between">
-            <div className="text-sm leading-6">
-              <a
-                href="#"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot password?
-              </a>
-            </div>
-          </div> */}
-
           <div>
             <button
               type="submit"
@@ -111,11 +101,7 @@ export const LoginForm = () => {
             >
               Sign in
             </button>
-            {error && (
-              <span className="text-center bg-red-300 py-4 mb-6 rounded">
-                {error}
-              </span>
-            )}
+           <AlertMessage message={error} type={'error'} />
           </div>
         </div>
 
