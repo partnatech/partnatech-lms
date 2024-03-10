@@ -14,7 +14,7 @@ export const SidebarRoutes = () => {
     { name: "Home", href: "/dashboard", icon: HomeIcon },
     { name: "Learn", href: "/dashboard/learn", icon: LightBulbIcon },
     { name: "Events", href: "/events", icon: CalendarDaysIcon },
-    { name: "Bootcamps", href: "/bootcamps", icon: AcademicCapIcon },
+    { name: "Program and Bootcamps", href: "/dashboard/bootcamp", icon: AcademicCapIcon },
     { name: "Projects", href: "/projects", icon: BuildingLibraryIcon },
     { name: "Practices", href: "/practice", icon: ArrowTrendingUpIcon },
     { name: "Subscribe", href: "/subscribe", icon: StarIcon },

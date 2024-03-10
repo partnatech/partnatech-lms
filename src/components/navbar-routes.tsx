@@ -1,9 +1,9 @@
 "use client";
 import DarkModeToggle from "@/app/dashboard/_components/dark-mode-toggle";
+import { cn } from "@/utils/cn";
 import { Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { ChevronDoubleDownIcon } from "@heroicons/react/24/solid";
-import clsx from "clsx";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { Fragment } from "react";
@@ -90,7 +90,7 @@ export const NavbarRoutes = ({ user, setSidebarOpen }: NavbarProps) => {
                   {({ active }) => (
                     <a
                       href="#"
-                      className={clsx(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}
+                      className={cn(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}
                     >
                       Profile
                     </a>
@@ -100,7 +100,7 @@ export const NavbarRoutes = ({ user, setSidebarOpen }: NavbarProps) => {
                   {({ active }) => (
                     <a
                       href="#"
-                      className={clsx(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}
+                      className={cn(active ? "bg-gray-50" : "", "block px-3 py-1 text-sm leading-6 text-gray-900")}
                       onClick={() => signOut()}
                     >
                       Logout
