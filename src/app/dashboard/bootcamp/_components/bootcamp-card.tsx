@@ -15,7 +15,7 @@ interface BootcampInfo {
   owner: string;
   period: string;
   location: string;
-  price: string;
+  price?: string;
   discountPrice?: string;
   nextStepLink: string;
 }
