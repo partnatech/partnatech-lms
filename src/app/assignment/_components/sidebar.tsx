@@ -14,21 +14,24 @@ export const Sidebar = () => {
         </div>
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <div className="text-xs font-semibold leading-6 text-gray-400">
+              Assignment and Rubrics
+            </div>
             <li>
-              <ul role="list" className="-mx-2 space-y-1">
+              <ul role="list" className="space-y-1">
                 <SidebarRoutes />
               </ul>
             </li>
             <li className="mt-auto">
               <Link
-                href="/dashboard"
+                href="/bootcamp"
                 className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold dark:text-indigo-200 text-gray-800 hover:text-white hover:bg-indigo-700"
               >
                 <ArrowLeftIcon
                   className="h-6 w-6 dark:text-indigo-200 text-indigo-600 group-hover:text-white"
                   aria-hidden="true"
                 />
-                Back to Partnatech Learning
+                Back to Partnatech Bootcamp
               </Link>
             </li>
           </ul>
