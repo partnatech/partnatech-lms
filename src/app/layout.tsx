@@ -1,5 +1,5 @@
 import "./globals.css";
-import { NextAuthProvider } from "./providers";
+import { NextAuthProvider } from "../provider/auth";
 
 export const metadata = {
   title: "Partnatech LMS",

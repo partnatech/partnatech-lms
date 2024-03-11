@@ -42,7 +42,7 @@ const bootcampItems = [
     owner: "owner",
     location: "online",
     period: "01 March - 21 March 2024",
-    nextStepLink: "https://partna.tech" //LINK BOOTCAMP
+    nextStepLink: "/bootcamp" //LINK BOOTCAMP
   }
 ];
 
