@@ -5,36 +5,28 @@ import { SidebarItem } from "./sidebar-item";
 export const SidebarRoutes = () => {
   const routes = [
     {
-      section: "Phase 1",
+      section: "Practice Case",
       children: [
         {
-          name: "Assignment 1 - Database",
-          href: "/assignment/1-1",
+          name: "Practice Case 1",
+          href: "/practice-and-mentoring/practice/1",
         },
         {
-          name: "Assignment 2 - Database",
-          href: "/assignment/1-2",
+          name: "Practice Case 2",
+          href: "/practice-and-mentoring/practice/2",
         },
         {
-          name: "Assignment 3 - Python",
-          href: "/assignment/1-3",
+          name: "Practice Case 3",
+          href: "/practice-and-mentoring/practice/3",
         },
       ],
     },
     {
-      section: "Phase 2",
+      section: "Mentoring",
       children: [
         {
-          name: "Assignment 1 - Database 2",
-          href: "/assignment/2-1",
-        },
-        {
-          name: "Assignment 2 - Database 2",
-          href: "/assignment/2-2",
-        },
-        {
-          name: "Assignment 3 - Python 2",
-          href: "/assignment/2-3",
+          name: "Mentoring 1",
+          href: "/practice-and-mentoring/mentoring/11",
         },
       ],
     },

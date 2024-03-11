@@ -4,7 +4,7 @@ import React from "react";
 const assignmentItems = [
   {
     id: 1,
-    phase: "1",
+    section: "1",
     assignments: [
       {
         title: "Assignment 1 - Database",
@@ -22,7 +22,7 @@ const assignmentItems = [
   },
   {
     id: 2,
-    phase: "2",
+    section: "2",
     assignments: [
       {
         title: "Assignment 1 - Database 2",
@@ -54,11 +54,17 @@ const AssignmentAndRubicsPage = () => {
         <div className="p-6 grid gap-4">
           {assignmentItems.map((item) => (
             <div key={item.id} className="space-y-2">
-              <h3 className="font-bold">Phase {item.phase}</h3>
+              <h3 className="font-bold">Phase {item.section}</h3>
               <ul className="list-none space-y-1">
                 {item.assignments.map((assignment) => (
                   <li key={assignment.title}>
-                    <Link href={assignment.link} target="_blank" className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline">{assignment.title}</Link>
+                    <Link
+                      href={assignment.link}
+                      target="_blank"
+                      className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline"
+                    >
+                      {assignment.title}
+                    </Link>
                   </li>
                 ))}
               </ul>
