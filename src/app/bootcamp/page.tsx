@@ -68,14 +68,13 @@ const BootcampPage = () => {
           </div>
           <div className="space-y-2">
             <h3 className="font-bold">Bootcamp Schedule</h3>
-            <div className="md:grid md:grid-cols-3">
+            <div className="md:grid md:grid-cols-3 py-2">
               <div className="md:col-span-2">
                 <Image
                   src={"/images/auth.jpg"}
                   alt="Bootcamp Cover"
-                 width={"1024"}
-                 height={"1024"}
-
+                  width={"1024"}
+                  height={"1024"}
                 />
               </div>
             </div>
