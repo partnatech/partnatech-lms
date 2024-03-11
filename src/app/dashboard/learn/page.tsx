@@ -16,7 +16,6 @@ const LearnPage = async ({ searchParams }: LearnPageProps ) => {
       name: "asc"
     }
   });
-  const { categoryId } = searchParams;
 
   const courses = await getCourses({
     ...searchParams,
