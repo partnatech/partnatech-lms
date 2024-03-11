@@ -1,8 +1,9 @@
 "use client";
 
-import DarkModeToggle from "../../../components/dark-mode-toggle";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { SidebarRoutes } from "./sidebar-routes";
 import { Logo } from "@/components/logo";
+import Link from "next/link";
 
 export const Sidebar = () => {
   return (
@@ -17,6 +18,18 @@ export const Sidebar = () => {
               <ul role="list" className="-mx-2 space-y-1">
                 <SidebarRoutes />
               </ul>
+            </li>
+            <li className="mt-auto">
+              <Link
+                href="/dashboard"
+                className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+              >
+                <ArrowLeftIcon
+                  className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                  aria-hidden="true"
+                />
+                Back to Partnatech Learning
+              </Link>
             </li>
           </ul>
         </nav>

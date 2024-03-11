@@ -4,7 +4,7 @@ import { Navbar } from "./_components/navbar";
 import { PropsWithChildren } from "react";
 import ThemeProvider from "@/provider/theme";
 
-export default async function DashboardLayout({ children }: PropsWithChildren) {
+export default async function BootcampLayout({ children }: PropsWithChildren) {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 

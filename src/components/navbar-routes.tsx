@@ -1,5 +1,5 @@
 "use client";
-import DarkModeToggle from "@/app/dashboard/_components/dark-mode-toggle";
+import DarkModeToggle from "@/components/dark-mode-toggle";
 import { cn } from "@/utils/cn";
 import { Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
