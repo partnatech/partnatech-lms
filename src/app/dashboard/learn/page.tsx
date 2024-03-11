@@ -6,15 +6,15 @@ import CourseList from "./_components/course-list";
 
 interface LearnPageProps {
   searchParams: {
-    categoryId: string,
-  }
+    categoryId: string;
+  };
 }
 
-const LearnPage = async ({ searchParams }: LearnPageProps ) => {
+const LearnPage = async ({ searchParams }: LearnPageProps) => {
   const categories = await prisma.category.findMany({
     orderBy: {
-      name: "asc"
-    }
+      name: "asc",
+    },
   });
 
   const courses = await getCourses({
