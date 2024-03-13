@@ -4,7 +4,7 @@ interface AlertMessageProps {
 }
 
 export const AlertMessage = ({ message, type }: AlertMessageProps) => {
-  let className = "text-center py-8 mx-auto";
+  let className = "block my-2 mx-auto";
 
   switch (type) {
     case "error":
