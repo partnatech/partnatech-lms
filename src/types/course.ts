@@ -13,5 +13,6 @@ export interface CourseInfo {
   nextStepLink: string;
   chapter?: string;
   mentorImage: string;
-  mentorJob: string;
+  mentorJob?: string;
+  id?: number;
 }

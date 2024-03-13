@@ -19,6 +19,7 @@ const bootcampItems = [
     price: 'Rp.100.000',
     discountPrice: 'Rp.80.000',
     nextStepLink: 'https://google.com',
+    mentorImage: '/images/mentor.png',
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ const bootcampItems = [
     period: '01 March - 21 March 2024',
     price: 'Rp.100.000',
     nextStepLink: 'https://google.com',
+    mentorImage: '/images/mentor.png',
   },
   {
     id: 2,
@@ -44,6 +46,7 @@ const bootcampItems = [
     location: 'online',
     period: '01 March - 21 March 2024',
     nextStepLink: '/bootcamp', //LINK BOOTCAMP
+    mentorImage: '/images/mentor.png',
   },
 ];
 
