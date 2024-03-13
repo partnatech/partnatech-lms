@@ -1,7 +1,3 @@
-import React from "react";
+import HomePage from './(home)/page';
 
-const DashboardPage = () => {
-  return <div>Dashboard Home Page</div>;
-};
-
-export default DashboardPage;
+export default HomePage;
