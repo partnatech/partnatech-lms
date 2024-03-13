@@ -44,7 +44,7 @@ export const CourseCard = ({ course }: CourseCardProps) => {
         </h3>
         <div
           className={cn(
-            'flex justify-between items-center mb-3',
+            'flex justify-between items-center',
             course.category === 'ENROLLED' ? 'mb-[36px]' : 'mb-3'
           )}
         >
