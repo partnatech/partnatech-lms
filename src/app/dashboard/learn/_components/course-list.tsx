@@ -10,7 +10,7 @@ const CourseList = ({ courses }: CoursesListProps) => {
   return (
     <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
       {courses.map((course) => (
-        <Link key={String(course.id)} href="#!">
+        <Link key={String(course.id)} href={`/dashboard/learn/${course.id}`}>
           <div className="border overflow-hidden group border-indigo-100 dark:border-gray-700 h-full rounded-md hover:bg-indigo-50 dark:hover:bg-gray-800 transition-all duration-200 ease-in-out">
             <div className="relative aspect-video bg-indigo-100 dark:bg-gray-800"></div>
 
