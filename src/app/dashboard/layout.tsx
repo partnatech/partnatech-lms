@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { Navbar } from "./_components/navbar";
-import { PropsWithChildren } from "react";
-import ThemeProvider from "@/provider/theme";
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+import { Navbar } from './_components/navbar';
+import { PropsWithChildren } from 'react';
+import ThemeProvider from '@/provider/theme';
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
   const session = await getServerSession(authOptions);
@@ -10,6 +10,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
 
   return (
     <ThemeProvider>
+      {/* Top Navbar and Sidebar for Learn LMS */}
       <Navbar user={user} />
       <div className="lg:pl-72 dark:bg-gray-900 min-h-screen transition duration-150 ease-in-out">
         <main className="py-10">
