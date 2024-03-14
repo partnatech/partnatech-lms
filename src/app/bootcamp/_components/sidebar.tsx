@@ -21,7 +21,7 @@ export const Sidebar = () => {
             </li>
             <li className="mt-auto">
               <Link
-                href="/dashboard"
+                href="/dashboard/bootcamp"
                 className="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold dark:text-indigo-200 text-gray-800 hover:text-white hover:bg-indigo-700"
               >
                 <ArrowLeftIcon
