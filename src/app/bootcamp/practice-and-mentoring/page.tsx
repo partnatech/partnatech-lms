@@ -1,32 +1,32 @@
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
 const practiceItems = [
   {
     id: 1,
-    section: 'Practice Case',
+    section: "Practice Case",
     children: [
       {
-        title: 'Practice Case 1',
-        link: '/practice-and-mentoring/practice/1',
+        title: "Practice Case 1",
+        link: "/bootcamp/practice-and-mentoring/practice/1",
       },
       {
-        title: 'Practice Case 2',
-        link: '/practice-and-mentoring/practice/2',
+        title: "Practice Case 2",
+        link: "/bootcamp/practice-and-mentoring/practice/2",
       },
       {
-        title: 'Practice Case 3',
-        link: '/practice-and-mentoring/practice/3',
+        title: "Practice Case 3",
+        link: "/bootcamp/practice-and-mentoring/practice/3",
       },
     ],
   },
   {
     id: 2,
-    section: 'Mentoring',
+    section: "Mentoring",
     children: [
       {
-        title: 'Mentoring 1',
-        link: '/practice-and-mentoring/mentoring/11',
+        title: "Mentoring 1",
+        link: "/bootcamp/practice-and-mentoring/mentoring/11",
       },
     ],
   },
@@ -52,7 +52,6 @@ const PracticeAndMentoringPage = () => {
                   <li key={child.title}>
                     <Link
                       href={child.link}
-                      target="_blank"
                       className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline"
                     >
                       {child.title}

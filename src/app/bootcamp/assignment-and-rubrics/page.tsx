@@ -8,15 +8,15 @@ const assignmentItems = [
     assignments: [
       {
         title: "Assignment 1 - Database",
-        link: "/assignment/1-1",
+        link: "/bootcamp/assignment-and-rubrics/1-1",
       },
       {
         title: "Assignment 2 - Database",
-        link: "/assignment/1-2",
+        link: "/bootcamp/assignment-and-rubrics/1-2",
       },
       {
         title: "Assignment 3 - Python",
-        link: "/assignment/1-3",
+        link: "/bootcamp/assignment-and-rubrics/1-3",
       },
     ],
   },
@@ -26,15 +26,15 @@ const assignmentItems = [
     assignments: [
       {
         title: "Assignment 1 - Database 2",
-        link: "/assignment/2-1",
+        link: "/bootcamp/assignment-and-rubrics/2-1",
       },
       {
         title: "Assignment 2 - Database 2",
-        link: "/assignment/2-2",
+        link: "/bootcamp/assignment-and-rubrics/2-2",
       },
       {
         title: "Assignment 3 - Python 2",
-        link: "/assignment/2-3",
+        link: "/bootcamp/assignment-and-rubrics/2-3",
       },
     ],
   },
@@ -60,7 +60,6 @@ const AssignmentAndRubicsPage = () => {
                   <li key={assignment.title}>
                     <Link
                       href={assignment.link}
-                      target="_blank"
                       className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline"
                     >
                       {assignment.title}
