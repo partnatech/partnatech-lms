@@ -94,3 +94,35 @@ model Category {
 
   @@map("categories")
 }
+
+model Bootcamp {
+  id            String    @id @default(uuid()) @db.Uuid
+  title         String    @db.VarChar
+  videoUrl      String?   @db.VarChar @map("video_url")
+  startDate     DateTime  @db.Date() @map("start_date")
+  endDate       DateTime  @db.Date() @map("end_date")
+  price         Float     @db.DoublePrecision()
+  discountPrice Float?    @db.DoublePrecision() @map("discount_price")
+  location      String    @db.VarChar
+
+  mentorId      String?   @db.Uuid @map("mentor_id")
+  mentor        Mentor?   @relation(fields: [mentorId], references: [id])
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("bootcamps")
+}
+
+model Mentor {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar
+  description String   @db.Text
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  bootcamps   Bootcamp[]
+
+  @@map("mentors")
+}
