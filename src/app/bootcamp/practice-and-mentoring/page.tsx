@@ -52,7 +52,6 @@ const PracticeAndMentoringPage = () => {
                   <li key={child.title}>
                     <Link
                       href={child.link}
-                      target="_blank"
                       className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline"
                     >
                       {child.title}

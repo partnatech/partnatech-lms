@@ -60,7 +60,6 @@ const AssignmentAndRubicsPage = () => {
                   <li key={assignment.title}>
                     <Link
                       href={assignment.link}
-                      target="_blank"
                       className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline"
                     >
                       {assignment.title}
