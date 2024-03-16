@@ -7,6 +7,7 @@ const practiceItems = [
     section: 'Practice Case',
     children: [
       {
+<<<<<<< HEAD
         title: 'Practice Case 1',
         link: '/practice-and-mentoring/practice/1',
       },
@@ -17,6 +18,18 @@ const practiceItems = [
       {
         title: 'Practice Case 3',
         link: '/practice-and-mentoring/practice/3',
+=======
+        title: "Practice Case 1",
+        link: "/bootcamp/practice-and-mentoring/practice/1",
+      },
+      {
+        title: "Practice Case 2",
+        link: "/bootcamp/practice-and-mentoring/practice/2",
+      },
+      {
+        title: "Practice Case 3",
+        link: "/bootcamp/practice-and-mentoring/practice/3",
+>>>>>>> 5ab57f3a6158503eade8af3a37a32602ee5eb8cd
       },
     ],
   },
@@ -25,8 +38,13 @@ const practiceItems = [
     section: 'Mentoring',
     children: [
       {
+<<<<<<< HEAD
         title: 'Mentoring 1',
         link: '/practice-and-mentoring/mentoring/11',
+=======
+        title: "Mentoring 1",
+        link: "/bootcamp/practice-and-mentoring/mentoring/11",
+>>>>>>> 5ab57f3a6158503eade8af3a37a32602ee5eb8cd
       },
     ],
   },
@@ -52,7 +70,6 @@ const PracticeAndMentoringPage = () => {
                   <li key={child.title}>
                     <Link
                       href={child.link}
-                      target="_blank"
                       className="inline-flex font-medium items-center ml-4 hover:text-indigo-500 hover:underline"
                     >
                       {child.title}
