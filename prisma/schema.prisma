@@ -67,63 +67,83 @@ model VerificationRequest {
 }
 
 model Course {
-  id String @id @default(uuid())
-  title String @db.Text
-  description String? @db.Text
-  imageUrl String? @db.Text @map("image_url")
-  price Float?
-
-  categoryId String? @db.Uuid @map("category_id")
-  category Category? @relation(fields: [categoryId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                 String
+  description           String?
+  imageUrl              String?                 @map("image_url")
+  price                 Float?
+  categoryId            String?                 @map("category_id") @db.Uuid
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
+  notionSlug            String?                 @map("notion_slug")
+  discountPrice         Float?                  @map("discount_price")
+  duration              Int?
+  durationUnitId      String?                 @db.Uuid  @map("duration_unit_id")
+  course_mentor_mapping course_mentor_mapping[]
+  category              Category?               @relation(fields: [categoryId], references: [id])
+  duration_units        duration_units?         @relation(fields: [durationUnitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_courses_duration_unit_id_fkey")
 
   @@index([categoryId])
   @@map("courses")
 }
 
 model Category {
-  id String @id @default(uuid()) @db.Uuid
-  name String @unique
-
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  courses Course[]
+  courses   Course[]
 
   @@map("categories")
 }
 
 model Bootcamp {
-  id             String    @id @default(uuid()) @db.Uuid
-  title          String    @db.VarChar
-  videoUrl       String?   @db.VarChar @map("video_url")
-  startDate      DateTime  @db.Date() @map("start_date")
-  endDate        DateTime  @db.Date() @map("end_date")
-  price          Float     @db.DoublePrecision()
-  discountPrice  Float?    @db.DoublePrecision() @map("discount_price")
-  location       String    @db.VarChar
-  preRequisities String    @db.Text @default("") @map("pre_requisities")
-
-  mentorId       String?   @db.Uuid @map("mentor_id")
-  mentor         Mentor?   @relation(fields: [mentorId], references: [id])
-
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
+  id             String   @id @default(uuid()) @db.Uuid
+  title          String   @db.VarChar
+  videoUrl       String?  @map("video_url") @db.VarChar
+  startDate      DateTime @map("start_date") @db.Date
+  endDate        DateTime @map("end_date") @db.Date
+  price          Float
+  discountPrice  Float?   @map("discount_price")
+  location       String   @db.VarChar
+  mentorId       String?  @map("mentor_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  preRequisities String   @default("") @map("pre_requisities")
+  mentor         Mentor?  @relation(fields: [mentorId], references: [id])
 
   @@map("bootcamps")
 }
 
 model Mentor {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String   @db.VarChar
-  description String   @db.Text
-
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  bootcamps   Bootcamp[]
+  id                    String                  @id @default(uuid()) @db.Uuid
+  name                  String                  @db.VarChar
+  description           String
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
+  avatarUrl            String? @map("avatar_url")
+  bootcamps             Bootcamp[]
+  course_mentor_mapping course_mentor_mapping[]
 
   @@map("mentors")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model course_mentor_mapping {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)    @map("created_at")
+  courseId  String?   @db.Uuid @map("course_id")
+  mentorId  String?   @db.Uuid   @map("mentor_id")
+  updatedAt DateTime? @db.Timestamptz(6)    @map("updated_at")
+  courses    Course?   @relation(fields: [courseId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_mentor_mapping_course_id_fkey")
+  mentors    Mentor?   @relation(fields: [mentorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_mentor_mapping_mentor_id_fkey")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model duration_units {
+  id            String    @id(map: "duration_unit_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)  @map("created_at")
+  durationUnit String?  @map("duration_unit")
+  updatedAt    DateTime? @db.Timestamptz(6)  @map("updated_at")
+  courses       Course[]
 }
