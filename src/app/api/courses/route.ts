@@ -10,8 +10,8 @@ export async function GET(req: NextRequest) {
 
     const data = await prisma.course.findMany({
       include: {
-        duration_units: true,
-        course_mentor_mapping: {
+        durationUnits: true,
+        courseMentorMappings: {
           include: {
             mentors: true,
           },
