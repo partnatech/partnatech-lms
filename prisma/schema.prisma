@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String
-  email         String?   @unique
+  email         String?    @unique
   password      String?
-  emailVerified DateTime? @map("email_verified")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  emailVerified DateTime?  @map("email_verified")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   image         String?
   accounts      Account[]
   sessions      Session[]
+  students      Students[]
 
   @@map("users")
 }
@@ -67,23 +68,24 @@ model VerificationRequest {
 }
 
 model Course {
-  id                   String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title                String
-  description          String?
-  imageUrl             String?                @map("image_url")
-  price                Float?
-  categoryId           String?                @map("category_id") @db.Uuid
-  createdAt            DateTime               @default(now()) @map("created_at")
-  updatedAt            DateTime               @updatedAt @map("updated_at")
-  notionSlug           String?                @map("notion_slug")
-  discountPrice        Float?                 @map("discount_price")
-  duration             Int?
-  durationUnitId       String?                @map("duration_unit_id") @db.Uuid
-  slug                 String?                @default("")
-  courseMentorMappings CourseMentorMappings[]
-  courseSections      CourseSections[]
-  category             Category?              @relation(fields: [categoryId], references: [id])
-  durationUnits        DurationUnits?         @relation(fields: [durationUnitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_courses_duration_unit_id_fkey")
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                 String
+  description           String?
+  imageUrl              String?                 @map("image_url")
+  price                 Float?
+  categoryId            String?                 @map("category_id") @db.Uuid
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
+  notionSlug            String?                 @map("notion_slug")
+  discountPrice         Float?                  @map("discount_price")
+  duration              Int?
+  durationUnitId        String?                 @map("duration_unit_id") @db.Uuid
+  slug                  String?                 @default("")
+  courseMentorMappings  CourseMentorMappings[]
+  courseModules         CourseModules[]
+  courseStudentMappings CourseStudentMappings[]
+  category              Category?               @relation(fields: [categoryId], references: [id])
+  durationUnits         DurationUnits?          @relation(fields: [durationUnitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_courses_duration_unit_id_fkey")
 
   @@index([categoryId])
   @@map("courses")
@@ -118,14 +120,14 @@ model Bootcamp {
 }
 
 model Mentor {
-  id                     String                 @id @default(uuid()) @db.Uuid
-  name                   String                 @db.VarChar
-  description            String
-  createdAt              DateTime               @default(now()) @map("created_at")
-  updatedAt              DateTime               @updatedAt @map("updated_at")
-  avatarUrl              String?                @map("avatar_url")
-  bootcamps              Bootcamp[]
-  course_mentor_mappings CourseMentorMappings[]
+  id                   String                 @id @default(uuid()) @db.Uuid
+  name                 String                 @db.VarChar
+  description          String
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            DateTime               @updatedAt @map("updated_at")
+  avatarUrl            String?                @map("avatar_url")
+  bootcamps            Bootcamp[]
+  courseMentorMappings CourseMentorMappings[]
 
   @@map("mentors")
 }
@@ -133,8 +135,8 @@ model Mentor {
 model CourseMentorMappings {
   id        String    @id(map: "course_mentor_mapping_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  course_id String?   @db.Uuid
-  mentor_id String?   @db.Uuid
+  course_id String?   @map("course_id") @db.Uuid
+  mentor_id String?   @map("mentor_id") @db.Uuid
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   courses   Course?   @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_mentor_mapping_course_id_fkey")
   mentors   Mentor?   @relation(fields: [mentor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_mentor_mapping_mentor_id_fkey")
@@ -152,26 +154,81 @@ model DurationUnits {
   @@map("duration_units")
 }
 
-model CourseSectionLectures {
-  id                BigInt           @id(map: "course_section_lecture_pkey") @default(autoincrement())
-  createdAt         DateTime         @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt         DateTime?        @updatedAt @map("updated_at") @db.Timestamp(6)
-  name              String?
-  videoUrl          String?          @map("video_url")
-  course_section_id String?          @db.Uuid
-  slug              String           @unique(map: "course_section_lecture_slug_key") @default("")
-  notionSlug        String?          @map("notion_slug")
-  course_sections   CourseSections? @relation(fields: [course_section_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_section_lecture_course_section_id_fkey")
-  @@map("course_section_lectures")
+model CourseModuleLectures {
+  id                           String                         @id(map: "course_section_lecture_pkey") @db.Uuid
+  createdAt                    DateTime                       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                    DateTime?                      @updatedAt @map("updated_at") @db.Timestamp(6)
+  name                         String?
+  videoUrl                     String?                        @map("video_url")
+  course_module_id             String?                        @db.Uuid
+  slug                         String                         @unique(map: "course_section_lecture_slug_key") @default("")
+  notionSlug                   String?                        @map("notion_slug")
+  courseModules                CourseModules?                 @relation(fields: [course_module_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_section_lecture_course_section_id_fkey")
+  studentCourseLectureMappings StudentCourseLectureMappings[]
+
+  @@map("course_module_lectures")
 }
 
-model CourseSections {
-  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt              DateTime                  @default(now()) @db.Timestamp(6) @map("created_at")
-  updatedAt              DateTime?                 @db.Timestamp(6) @updatedAt @map("updated_at")
-  courseSectionName     String? @map("course_section_name")
-  course_id               String?                   @db.Uuid 
-  course_section_lectures CourseSectionLectures[]
-  courses                 Course?                   @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_sections_course_id_fkey")
-  @@map("course_sections")
+model CourseModules {
+  id                   String                 @id(map: "course_sections_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt            DateTime               @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt            DateTime?              @updatedAt @map("updated_at") @db.Timestamp(6)
+  courseSectionName    String?                @map("course_section_name")
+  course_id            String?                @map("course_id") @db.Uuid
+  courseModuleLectures CourseModuleLectures[]
+  courses              Course?                @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_sections_course_id_fkey")
+
+  @@map("course_modules")
+}
+
+model CourseStudentMappings {
+  id            String    @id(map: "course_student_mapping_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  course_id     String?   @db.Uuid
+  student_id    String?   @db.Uuid
+  updatedAt     DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
+  enrolled_date DateTime? @db.Timestamptz(6)
+  courses       Course?   @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_student_mapping_course_id_fkey")
+  students      Students? @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_course_student_mapping_student_id_fkey")
+
+  @@map("course_student_mappings")
+}
+
+model StudentCourseLectureMappings {
+  id                   String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  student_id           String?               @db.Uuid
+  lecture_id           String?               @db.Uuid
+  completion           Boolean?
+  completion_date      DateTime?             @db.Timestamptz(6)
+  updatedAt            DateTime?             @updatedAt @map("updated_at") @db.Timestamptz(6)
+  courseModuleLectures CourseModuleLectures? @relation(fields: [lecture_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_student_course_lecture_mappings_lecture_id_fkey")
+  students             Students?             @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_student_course_lecture_mappings_student_id_fkey")
+
+  @@map("student_course_lecture_mappings")
+}
+
+model Students {
+  id                           String                         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt                    DateTime                       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                    DateTime?                      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  user_id                      String?                        @map("user_id")
+  emails                       String                         @db.VarChar
+  courseStudentMappings        CourseStudentMappings[]
+  studentCourseLectureMappings StudentCourseLectureMappings[]
+  users                        User?                          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_students_user_id_fkey")
+
+  @@map("students")
+}
+
+model Subscriptions {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime? @updatedAt @map("updated_at") @db.Timestamp(6)
+  name          String?   @db.VarChar
+  price         Float?
+  discountPrice Float?    @map("discount_price")
+  monthDuration Int?      @map("month_duration")
+
+  @@map("subscriptions")
 }
