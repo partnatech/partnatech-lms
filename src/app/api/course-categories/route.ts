@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const offset = Number(searchParams.get("offset")) || 0;
-    const limit = Number(searchParams.get("limit")) || 10;
+  const { searchParams } = new URL(req.url);
+  const offset = Number(searchParams.get("offset")) || 0;
+  const limit = Number(searchParams.get("limit")) || 10;
 
+  try {
     const data = await prisma.courseCategories.findMany({
       take: limit,
       skip: offset,
