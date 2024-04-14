@@ -84,21 +84,11 @@ model Course {
   courseMentorMappings  CourseMentorMappings[]
   courseModules         CourseModules[]
   courseStudentMappings CourseStudentMappings[]
-  category              Category?               @relation(fields: [categoryId], references: [id])
+  category              CourseCategories?      @relation(fields: [categoryId], references: [id])
   durationUnits         DurationUnits?          @relation(fields: [durationUnitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public_courses_duration_unit_id_fkey")
 
   @@index([categoryId])
   @@map("courses")
-}
-
-model Category {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  courses   Course[]
-
-  @@map("categories")
 }
 
 model Bootcamp {
@@ -231,4 +221,14 @@ model Subscriptions {
   monthDuration Int?      @map("month_duration")
 
   @@map("subscriptions")
+}
+
+model CourseCategories {
+  id         String   @id(map: "categories_pkey") @db.Uuid @default(uuid())
+  name       String   @unique(map: "categories_name_key")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  courses    Course[]
+
+  @@map("course_categories")
 }

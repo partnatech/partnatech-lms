@@ -1,28 +1,78 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-// Sample seeding
-// const upsertUser = async (email: string, name: string) => {
-//   try {
-//     const userData = {
-//       where: { email },
-//       update: {},
-//       create: { email, name },
-//     };
+const insertDurationUnit = async () => {
+  try {
+    await prisma.durationUnits.createMany({
+      data: [
+        { durationUnit: "Minute(s)" },
+        { durationUnit: "Hour(s)" },
+        { durationUnit: "Day(s)" },
+        { durationUnit: "Week(s)" },
+        { durationUnit: "Month(s)" },
+      ],
+    });
+  } catch (error) {
+    console.error(`Error insert duration unit:`, error);
+    throw error;
+  }
+};
 
-//     const user = await prisma.user.upsert(userData);
-//     console.log(`User ${user.name} (${user.email}) upserted successfully`);
-//     return user;
-//   } catch (error) {
-//     console.error(`Error upserting user with email ${email}:`, error);
-//     throw error;
-//   }
-// };
+const insertCourseCategory = async () => {
+  try {
+    await prisma.courseCategories.createMany({
+      data: [
+        { name: "Data Analyst" },
+        { name: "Data Engineer" },
+        { name: "Front End Engineer" },
+        { name: "Back End Engineer" },
+      ],
+    });
+  } catch (error) {
+    console.error(`Error insert course:`, error);
+    throw error;
+  }
+};
+const insertCourse = async () => {
+  try {
+    const durationUnit = await prisma.durationUnits.findFirst({
+      where: {
+        durationUnit: "Minute(s)", // Replace with the name of the duration unit
+      },
+    });
+
+    if (!durationUnit) {
+      throw new Error("Duration unit not found");
+    }
+
+    const course = await prisma.course.create({
+      data: {
+        title: "Data Analyst Course",
+        slug: "data-analyst-course",
+        description:
+          "Learn essential skills for data analysis including data visualization, statistical analysis, and data manipulation techniques.",
+        imageUrl: "/images/dark-project-app-screenshot.png",
+        price: 400000,
+        category: {
+          connect: { name: "Data Analyst" },
+        },
+        duration: 120,
+        durationUnits: {
+          connect: { id: durationUnit.id },
+        },
+      },
+    });
+    return course;
+  } catch (error) {
+    console.error(`Error insert course:`, error);
+    throw error;
+  }
+};
 
 async function main() {
-  //   const alice = await upsertUser("alice@prisma.io", "Alice");
-  //   const bob = await upsertUser("bob@prisma.io", "Bob");
-  //   console.log({ alice, bob });
+  await insertDurationUnit();
+  await insertCourseCategory();
+  await insertCourse();
 }
 
 main()
