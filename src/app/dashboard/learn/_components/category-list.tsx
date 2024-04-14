@@ -1,8 +1,8 @@
-import { Category } from "@prisma/client";
+import { CourseCategories } from "@prisma/client";
 import CategoryItem from "./category-item";
 
 interface CategoryListProps {
-  categories: Category[];
+  categories: CourseCategories[];
 }
 
 const CategoryList = ({ categories }: CategoryListProps) => {

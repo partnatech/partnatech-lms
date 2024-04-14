@@ -11,7 +11,7 @@ interface LearnPageProps {
 }
 
 const LearnPage = async ({ searchParams }: LearnPageProps) => {
-  const categories = await prisma.category.findMany({
+  const categories = await prisma.courseCategories.findMany({
     orderBy: {
       name: "asc",
     },

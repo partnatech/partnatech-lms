@@ -1,58 +1,58 @@
-import Image from 'next/image';
-import React from 'react';
+import Image from "next/image";
+import React from "react";
 
-import Link from 'next/link';
-import { CourseCard } from '@/components/course-card';
-import StatCards from './(home)/_components/statCards';
+import Link from "next/link";
+import { CourseCard } from "@/components/course-card";
+import StatCards from "./(home)/_components/statCards";
 
 const bootcampItems = [
   {
     id: 1,
-    title: 'Class Promotions',
-    category: 'PROMOTIONS',
-    embedID: 'X3paOmcrTjQ',
-    mentorName: 'mentor-1',
-    pamflet: '',
-    mentorDescription: 'DA 3+ years',
-    owner: 'owner',
-    location: 'online',
-    period: '01 March - 21 March 2024',
-    price: 'Rp.100.000',
-    discountPrice: 'Rp.80.000',
-    nextStepLink: 'https://google.com',
-    mentorImage: '/images/mentor.png',
-    chapter: '12',
+    title: "Class Promotions",
+    category: "PROMOTIONS",
+    embedID: "X3paOmcrTjQ",
+    mentorName: "mentor-1",
+    pamflet: "",
+    mentorDescription: "DA 3+ years",
+    owner: "owner",
+    location: "online",
+    period: "01 March - 21 March 2024",
+    price: "Rp.100.000",
+    discountPrice: "Rp.80.000",
+    nextStepLink: "https://google.com",
+    mentorImage: "/images/mentor.png",
+    chapter: "12",
   },
   {
     id: 2,
-    title: 'Class Next',
-    category: 'NEXT',
-    pamflet: '',
-    embedID: 'X3paOmcrTjQ',
-    mentorName: 'mentor-2',
-    mentorDescription: 'DA 3+ years',
-    owner: 'owner',
-    location: 'online',
-    period: '01 March - 21 March 2024',
-    price: 'Rp.100.000',
-    nextStepLink: 'https://google.com',
-    mentorImage: '/images/mentor.png',
-    chapter: '12',
+    title: "Class Next",
+    category: "NEXT",
+    pamflet: "",
+    embedID: "X3paOmcrTjQ",
+    mentorName: "mentor-2",
+    mentorDescription: "DA 3+ years",
+    owner: "owner",
+    location: "online",
+    period: "01 March - 21 March 2024",
+    price: "Rp.100.000",
+    nextStepLink: "https://google.com",
+    mentorImage: "/images/mentor.png",
+    chapter: "12",
   },
   {
     id: 2,
-    title: 'Class Enrolled',
-    category: 'ENROLLED',
-    embedID: '',
-    pamflet: '/images/airflow-workshop.jpeg',
-    mentorName: 'mentor-3',
-    mentorDescription: 'DA 3+ years',
-    owner: 'owner',
-    location: 'online',
-    period: '01 March - 21 March 2024',
-    nextStepLink: '/bootcamp', //LINK BOOTCAMP
-    mentorImage: '/images/mentor.png',
-    chapter: '12',
+    title: "Class Enrolled",
+    category: "ENROLLED",
+    embedID: "",
+    pamflet: "/images/airflow-workshop.jpeg",
+    mentorName: "mentor-3",
+    mentorDescription: "DA 3+ years",
+    owner: "owner",
+    location: "online",
+    period: "01 March - 21 March 2024",
+    nextStepLink: "/bootcamp", //LINK BOOTCAMP
+    mentorImage: "/images/mentor.png",
+    chapter: "12",
   },
 ];
 
@@ -117,11 +117,11 @@ const HomePage = () => {
           />
         </div>
       </div>
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+      {/* <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {bootcampItems.map((item) => (
           <CourseCard key={item.id} course={item} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
