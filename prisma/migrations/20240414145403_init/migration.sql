@@ -211,19 +211,19 @@ CREATE TABLE "subscriptions" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+CREATE UNIQUE INDEX IF NOT EXISTS "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "accounts_provider_provider_account_id_key" ON "accounts"("provider", "provider_account_id");
+CREATE UNIQUE INDEX IF NOT EXISTS "accounts_provider_provider_account_id_key" ON "accounts"("provider", "provider_account_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "sessions_session_token_key" ON "sessions"("session_token");
+CREATE UNIQUE INDEX IF NOT EXISTS "sessions_session_token_key" ON "sessions"("session_token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VerificationRequest_token_key" ON "VerificationRequest"("token");
+CREATE UNIQUE INDEX IF NOT EXISTS "VerificationRequest_token_key" ON "VerificationRequest"("token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VerificationRequest_identifier_token_key" ON "VerificationRequest"("identifier", "token");
+CREATE UNIQUE INDEX IF NOT EXISTS "VerificationRequest_identifier_token_key" ON "VerificationRequest"("identifier", "token");
 
 -- CreateIndex
 CREATE INDEX "courses_category_id_idx" ON "courses"("category_id");
