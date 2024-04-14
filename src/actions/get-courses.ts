@@ -5,11 +5,13 @@ interface GetCourses {
   categoryId?: string;
 }
 
-export const getCourses = async ({ categoryId }: GetCourses): Promise<Course[]> => {
+export const getCourses = async ({
+  categoryId,
+}: GetCourses): Promise<Course[]> => {
   try {
     let category;
     if (categoryId) {
-      category = await prisma.category.findUnique({
+      category = await prisma.courseCategories.findUnique({
         where: {
           id: categoryId,
         },
