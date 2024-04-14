@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "users" IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS "users"  (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT,
@@ -13,7 +13,7 @@ CREATE TABLE "users" IF NOT EXISTS (
 );
 
 -- CreateTable
-CREATE TABLE "accounts" IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS "accounts" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     "type" TEXT,
@@ -32,7 +32,7 @@ CREATE TABLE "accounts" IF NOT EXISTS (
 );
 
 -- CreateTable
-CREATE TABLE "sessions" IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS "sessions" (
     "id" TEXT NOT NULL,
     "user_id" TEXT,
     "session_token" TEXT NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE "sessions" IF NOT EXISTS (
 );
 
 -- CreateTable
-CREATE TABLE "VerificationRequest" IF NOT EXISTS (
+CREATE TABLE IF NOT EXISTS "VerificationRequest" (
     "id" TEXT NOT NULL,
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
