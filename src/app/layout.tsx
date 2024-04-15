@@ -1,5 +1,8 @@
+import { Inter } from 'next/font/google';
 import "./globals.css";
 import { NextAuthProvider } from "../provider/auth";
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: "Partnatech LMS",
@@ -12,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html className={inter.className} lang="en">
       <body>
         <NextAuthProvider>{children}</NextAuthProvider>
       </body>
