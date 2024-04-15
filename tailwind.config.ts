@@ -41,7 +41,10 @@ const config: Config = {
           DEFAULT: '#18181B',
           dark: '#FFFFFF',
         },
-        'secondary-content': '#A1A1AA',
+        'secondary-content': {
+          DEFAULT: '#64748B',
+          dark: '#A1A1AA'
+        },
         // border colors
         'primary-border': '#302F31',
         'secondary-border': '#242427',
