@@ -2,12 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const categoryId = searchParams.get("categoryId") || undefined;
-    const offset = Number(searchParams.get("offset")) || 0;
-    const limit = Number(searchParams.get("limit")) || 10;
+  const { searchParams } = new URL(req.url);
+  const categoryId = searchParams.get("categoryId") || undefined;
+  const offset = Number(searchParams.get("offset")) || 0;
+  const limit = Number(searchParams.get("limit")) || 10;
 
+  try {
     const data = await prisma.course.findMany({
       include: {
         durationUnits: true,

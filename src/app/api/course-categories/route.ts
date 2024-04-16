@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/prisma";
 
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const offset = Number(searchParams.get("offset")) || 0;
-    const limit = Number(searchParams.get("limit")) || 10;
+  const { searchParams } = new URL(req.url);
+  const offset = Number(searchParams.get("offset")) || 0;
+  const limit = Number(searchParams.get("limit")) || 10;
 
-    const data = await prisma.category.findMany({
+  try {
+    const data = await prisma.courseCategories.findMany({
       take: limit,
       skip: offset,
     });
-    const totalCount = await prisma.category.count();
+    const totalCount = await prisma.courseCategories.count();
     return NextResponse.json({
       message: "Sucessfully retrieve course categories list",
       metadata: {
