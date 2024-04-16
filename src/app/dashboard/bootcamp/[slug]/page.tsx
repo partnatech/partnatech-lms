@@ -2,6 +2,7 @@ import { BootcampDetailHeader } from "@/components/bootcamp/bootcamp-header";
 import { Breadcrumb, BreadcrumbPage } from "@/components/breadcrumb";
 import { Tab, Tabs } from "@/components/tabs";
 import { CheckIcon } from "@heroicons/react/16/solid";
+import { BootcampDetailHeader } from "../_components/bootcamp-header";
 import { MentorCard } from "../_components/mentor-card";
 import { ContentContainer } from "../_components/content-container";
 import { ScheduleCards } from "../_components/schedule-cards";
