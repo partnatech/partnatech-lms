@@ -1,16 +1,17 @@
-'use client';
+"use client";
 import clsx from "clsx";
 import { useState } from "react";
 
 export type Tab = {
-  name: string,
-  href: string,
-  current: boolean
-}
+  name: string;
+  total?: string;
+  href: string;
+  current: boolean;
+};
 
 type TabsProps = {
-  tabs: Array<Tab>
-}
+  tabs: Array<Tab>;
+};
 
 export const Tabs = (props: TabsProps) => {
   const { tabs } = props;
@@ -19,7 +20,7 @@ export const Tabs = (props: TabsProps) => {
   const onTabChange = (tab: Tab) => {
     const newTabs = tabsState.map((t) => ({
       ...t,
-      current: t.name === tab.name
+      current: t.name === tab.name,
     }));
     setTabsState(newTabs);
   };
@@ -58,21 +59,33 @@ export const Tabs = (props: TabsProps) => {
                 href={tab.href}
                 className={clsx(
                   tab.current
-                    ? 'border-primary text-primary dark:border-primary-dark dark:text-primary-dark'
-                    : 'border-transparent text-secondary-content dark:text-secondary-content-dark hover:border-primary dark:hover:border-primary-dark hover:text-primary dark:hover:text-primary-dark',
-                  'whitespace-nowrap border-b-2 py-4 px-6 text-sm font-medium'
+                    ? "border-primary text-primary dark:border-primary-dark dark:text-primary-dark"
+                    : "border-transparent text-secondary-content dark:text-secondary-content-dark hover:border-primary dark:hover:border-primary-dark hover:text-primary dark:hover:text-primary-dark",
+                  "whitespace-nowrap border-b-2 py-4 px-6 text-sm font-medium"
                 )}
-                aria-current={tab.current ? 'page' : undefined}
+                aria-current={tab.current ? "page" : undefined}
                 onClick={() => {
                   onTabChange(tab);
                 }}
               >
-                {tab.name}
+                {tab.name}{" "}
+                {tab.total && (
+                  <span
+                    className={clsx(
+                      tab.current
+                        ? " text-primary bg-primary/20 dark:text-primary dark:bg-primary/20"
+                        : "text-secondary-content dark:text-secondary-content hover:text-primary hover:bg-primary/20 dark:hover:text-primary dark:hover:bg-primary/20",
+                      "inline-flex items-center justify-center w-6 h-6 text-xs rounded-full "
+                    )}
+                  >
+                    {tab.total}
+                  </span>
+                )}
               </a>
             ))}
           </nav>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
