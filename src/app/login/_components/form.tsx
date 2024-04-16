@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { AlertMessage } from "@/components/alert-message";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { AlertMessage } from "@/components/alert-message"
+import { signIn } from "next-auth/react"
+import { useSearchParams } from "next/navigation"
 
 export const LoginForm = () => {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const callbackError = searchParams.get("error") || "";
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/my-learning"
+  const callbackError = searchParams.get("error") || ""
 
   return (
     <div className="mt-10">
@@ -34,16 +34,8 @@ export const LoginForm = () => {
               fill="#34A853"
             />
           </svg>
-          <span className="text-sm font-semibold leading-6">Google</span>
+          <span className="text-sm font-semibold leading-6">Continue with Google</span>
         </button>
-      </div>
-      <div className="relative my-4">
-        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-gray-200" />
-        </div>
-        <div className="relative flex justify-center text-sm font-medium leading-6">
-          <span className="bg-white px-6 text-gray-900">Or continue with</span>
-        </div>
       </div>
       <div className="mt-6">
         <button
@@ -62,7 +54,7 @@ export const LoginForm = () => {
               clipRule="evenodd"
             />
           </svg>
-          <span className="text-sm font-semibold leading-6">Github</span>
+          <span className="text-sm font-semibold leading-6">Continue with Github</span>
         </button>
         {callbackError !== "" && (
           <div className="max-w-xs">
@@ -74,5 +66,5 @@ export const LoginForm = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
