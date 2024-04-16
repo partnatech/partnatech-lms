@@ -14,6 +14,41 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        primary: {
+          DEFAULT: '#10B981',
+          dark: '#2DD4BF',
+        },
+        secondary: {
+          DEFAULT: '#2563EB',
+          dark: '#A3E635',
+        },
+        // background colors
+        'primary-base': {
+          DEFAULT: '#FFFFFF',
+          dark: '#18181B',
+        },
+        'secondary-base': {
+          DEFAULT: '#F8FAFC',
+          dark: '#1D1D20',
+        },
+        'tertiary-base': {
+          DEFAULT: '#F1F5F9',
+          dark: '#242427',
+        },
+        // text colors
+        'primary-content': {
+          DEFAULT: '#18181B',
+          dark: '#FFFFFF',
+        },
+        'secondary-content': {
+          DEFAULT: '#64748B',
+          dark: '#A1A1AA'
+        },
+        // border colors
+        'primary-border': '#302F31',
+        'secondary-border': '#242427',
+      }
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
