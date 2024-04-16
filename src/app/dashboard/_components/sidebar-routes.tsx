@@ -1,42 +1,25 @@
-'use client';
+"use client"
 
-import { HomeIcon } from '@heroicons/react/24/solid';
-import { SidebarItem } from './sidebar-item';
-import { CalendarDaysIcon } from '@heroicons/react/24/solid';
-import { AcademicCapIcon } from '@heroicons/react/24/solid';
-import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
-import { StarIcon } from '@heroicons/react/24/solid';
-import { BuildingLibraryIcon } from '@heroicons/react/24/solid';
-import { LightBulbIcon } from '@heroicons/react/24/solid';
+import { HomeIcon } from "@heroicons/react/24/solid"
+import { SidebarItem } from "./sidebar-item"
+import { FaBookOpen } from "react-icons/fa"
+import { PiPathBold } from "react-icons/pi"
+import { FaGraduationCap, FaRocket, FaUserGroup } from "react-icons/fa6"
 
 export const SidebarRoutes = () => {
   const routes = [
-    { name: 'Home', href: '/dashboard', icon: HomeIcon },
-    { name: 'Learn', href: '/dashboard/learn', icon: LightBulbIcon },
-    { name: 'Events', href: '/dashboard/events', icon: CalendarDaysIcon },
-    {
-      name: 'Program and Bootcamps',
-      href: '/dashboard/bootcamp',
-      icon: AcademicCapIcon,
-    },
-    {
-      name: 'Projects',
-      href: '/dashboard/projects',
-      icon: BuildingLibraryIcon,
-    },
-    {
-      name: 'Practices',
-      href: '/dashboard/practice',
-      icon: ArrowTrendingUpIcon,
-    },
-    { name: 'Subscribe', href: '/dashboard/subscribe', icon: StarIcon },
-  ];
+    { name: "My Learning", href: "/dashboard/my-learning", icon: FaBookOpen },
+    { name: "Learning Path", href: "/dashboard/learning-path", icon: PiPathBold },
+    { name: "Bootcamp", href: "/dashboard/bootcamp", icon: FaGraduationCap },
+    { name: "Projects", href: "/dashboard/projects", icon: FaRocket },
+    { name: "Mentoring", href: "/dashboard/mentoring", icon: FaUserGroup },
+  ]
 
   return (
     <>
-      {routes.map((route) => (
+      {routes.map(route => (
         <SidebarItem key={route.href} menu={route} />
       ))}
     </>
-  );
-};
+  )
+}
