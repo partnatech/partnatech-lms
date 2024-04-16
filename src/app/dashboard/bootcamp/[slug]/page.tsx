@@ -2,6 +2,8 @@ import { BootcampDetailHeader } from "@/components/bootcamp/bootcamp-header";
 import { Breadcrumb, BreadcrumbPage } from "@/components/breadcrumb";
 import { Tab, Tabs } from "@/components/tabs";
 import { CheckIcon } from "@heroicons/react/16/solid";
+import { MentorCard } from "../_components/mentor-card";
+import { ContentContainer } from "../_components/content-container";
 
 const bootcamp = {
   title: 'Bootcamp Data Science dan Data Analyst for Beginner',
@@ -19,6 +21,18 @@ const bootcamp = {
     'Mendapat rekaman video setiap Sesi untuk dipelajari Kembali.',
     'Mendapatkan e-Certificate selesai pelatihan.',
     'Special award untuk tim terbaik.',
+  ],
+  mentors: [
+    {
+      name: 'Rahadian Rizky',
+      description: 'Data Engineer Lead - Telkom',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
+    {
+      name: 'Timothy Ronald',
+      description: 'Head of Data - Tokopedia',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
   ],
 }
 
@@ -69,6 +83,14 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
             ))}
           </div>
         </div>
+        {/* Mentor */}
+        <ContentContainer id="mentor" title="Your Mentor">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {bootcamp.mentors.map((mentor, idx) => (
+              <MentorCard key={`mentor-${idx}`} mentorImage={mentor.image} mentorName={mentor.name} mentorDescription={mentor.description} />
+            ))}
+          </div>
+        </ContentContainer>
       </div>
     </div>
 
