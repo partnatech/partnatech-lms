@@ -1,4 +1,3 @@
-import { BootcampDetailHeader } from "@/components/bootcamp/bootcamp-header";
 import { Breadcrumb, BreadcrumbPage } from "@/components/breadcrumb";
 import { Tab, Tabs } from "@/components/tabs";
 import { CheckIcon } from "@heroicons/react/16/solid";
@@ -74,15 +73,13 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
       <div className="flex flex-col gap-12 sticky top-64">
         <Tabs tabs={tabs} />
         {/* About */}
-        <div id="about" className="prose">
-          <h2 className="text-2xl font-semibold text-primary-content dark:text-primary-content-dark mb-4">About Bootcamp</h2>
+        <ContentContainer id="about" title="About Bootcamp">
           <p className="text-sm text-secondary-content dark:text-secondary-content-dark">
             {bootcamp.about}
           </p>
-        </div>
+        </ContentContainer>
         {/* Benefit */}
-        <div id="benefit" className="prose">
-          <h2 className="text-2xl font-semibold text-primary-content dark:text-primary-content-dark mb-4">Bootcamp Benefit</h2>
+        <ContentContainer id="benefit" title="Bootcamp Benefit">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {bootcamp.benefits.map((benefit, idx) => (
               <div key={`benefit-${idx}`} className="flex items-center gap-2 text-sm text-secondary-content dark:text-secondary-content-dark">
@@ -91,7 +88,7 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
               </div>
             ))}
           </div>
-        </div>
+        </ContentContainer>
         {/* Mentor */}
         <ContentContainer id="mentor" title="Your Mentor">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
