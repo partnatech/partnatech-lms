@@ -5,7 +5,7 @@ import { formatDuration } from "@/utils/number"
 import Link from "next/link"
 import qs from "qs"
 import React from "react"
-import { FaCheck, FaClock, FaGraduationCap, FaVideo } from "react-icons/fa6"
+import { FaArrowLeft, FaCheck, FaClock, FaGraduationCap, FaVideo } from "react-icons/fa6"
 import DifficulityIcon from "../../_components/difficulity-icon"
 
 interface CourseCardProps {
@@ -128,42 +128,74 @@ const LearningPathDetail = async ({ params }: { params: { id: string } }) => {
       {/* Course List */}
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-8">
-          {courseList.map((course, index) => (
-            <CourseCard
-              key={course.id}
-              data={course}
-              index={index + 1}
-              isLastItem={index + 1 === courseList.length}
-            />
-          ))}
+          {courseList.length > 0 ? (
+            <>
+              {courseList.map((course, index) => (
+                <CourseCard
+                  key={course.id}
+                  data={course}
+                  index={index + 1}
+                  isLastItem={index + 1 === courseList.length}
+                />
+              ))}
+            </>
+          ) : (
+            <div className="flex flex-col gap-4 justify-center items-center">
+              <img src="/illustration/empty-state.svg" className="w-[240px]" />
+
+              <p className="text-center text-sm text-secondary-content-dark">
+                Oops, looks like there is no courses available yet.
+              </p>
+
+              <Link
+                href="/dashboard/learning-path"
+                className="py-2 px-4 flex items-center gap-3 rounded-lg text-secondary-content-dark bg-tertiary-base-dark border border-primary-border"
+              >
+                <FaArrowLeft className="w-4 h-4" />
+                <p className="text-sm ">See Other Learning Path</p>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="col-span-4">
           <div className="border border-primary-border rounded-lg w-full bg-background-secondary text-white">
-            <div className="bg-tertiary-base-dark py-3 w-full flex items-center justify-center gap-2">
-              <FaCheck className="text-secondary-dark w-4 h-4" />
-              <p className="text-center text-secondary-dark text-sm">Mentoring Available</p>
-            </div>
-
-            {mentorList.map(mentor => (
-              <Link
-                href={`/dashboard/mentor/${mentor.id}`}
-                key={mentor.id}
-                className="p-4 last:border-none border-b border-primary-border flex items-center gap-3 group"
-              >
-                <img
-                  src={`${process.env.STRAPI_BASE_URL}${mentor.attributes.avatar.data.attributes.url}`}
-                  className="w-10 h-10 rounded-full object-cover"
-                ></img>
-
-                <div>
-                  <p className="text-sm font-semibold group-hover:text-secondary-dark">
-                    {mentor.attributes.name}
-                  </p>
-                  <p className="text-xs text-secondary-content-dark">{mentor.attributes.role}</p>
+            {mentorList.length > 0 ? (
+              <>
+                <div className="bg-tertiary-base-dark py-3 w-full flex items-center justify-center gap-2">
+                  <FaCheck className="text-secondary-dark w-4 h-4" />
+                  <p className="text-center text-secondary-dark text-sm">Mentoring Available</p>
                 </div>
-              </Link>
-            ))}
+
+                {mentorList.map(mentor => (
+                  <Link
+                    href={`/dashboard/mentor/${mentor.id}`}
+                    key={mentor.id}
+                    className="p-4 last:border-none border-b border-primary-border flex items-center gap-3 group"
+                  >
+                    <img
+                      src={`${process.env.STRAPI_BASE_URL}${mentor.attributes.avatar.data.attributes.url}`}
+                      className="w-10 h-10 rounded-full object-cover"
+                    ></img>
+
+                    <div>
+                      <p className="text-sm font-semibold group-hover:text-secondary-dark">
+                        {mentor.attributes.name}
+                      </p>
+                      <p className="text-xs text-secondary-content-dark">
+                        {mentor.attributes.role}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <div className="py-4">
+                <p className="text-sm text-secondary-content-dark text-center">
+                  No Mentor Available
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@ const TabButtonGroup = () => {
           href={tab.href}
           onClick={() => setHash(tab.href)}
           className={cn(
-            hash === tab.href ? " border-primary-dark-border" : "border-transparent",
+            hash === tab.href ? " border-primary-dark text-primary-dark" : "border-transparent",
             "px-6 text-sm py-4 border-b "
           )}
         >

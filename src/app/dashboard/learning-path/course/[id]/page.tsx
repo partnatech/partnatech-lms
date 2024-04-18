@@ -7,13 +7,14 @@ import React from "react"
 import { HiOutlineCalendar } from "react-icons/hi"
 import { format } from "date-fns"
 import TabButtonGroup from "../__components/tab-button-group"
-import { FaCheck } from "react-icons/fa6"
+import { FaCheck, FaGraduationCap, FaVideo } from "react-icons/fa6"
 import { HiMiniArrowUpRight } from "react-icons/hi2"
 import CourseContentSection from "../__components/course-content-section"
 
 const fetchCourseFromStrapi = async (id: string) => {
   const query = qs.stringify({
     populate: [
+      "cover_images",
       "category",
       "tools_used&select=tools_used,tools_used.icons",
       "course_sections&select=course_sections,course_sections.course_content_items",
@@ -31,13 +32,14 @@ const fetchCourseFromStrapi = async (id: string) => {
 const CoursePage = async ({ params }: { params: { id: string } }) => {
   const courseResponse = await fetchCourseFromStrapi(params.id)
   const courseData = courseResponse.data
+  console.log("🚀 ~ CoursePage ~ courseData:", courseData)
 
   const categoryData = courseData.attributes.category.data
   const toolsUsedData = courseData.attributes.tools_used
   const courseSectionsData = courseData.attributes.course_sections
 
   return (
-    <div className="grid grid-cols-12">
+    <div className="grid grid-cols-12 gap-6">
       <div className="col-span-8">
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-6">
@@ -75,14 +77,14 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
                 <div className="flex items-center gap-2">
                   <HiOutlineCalendar className="text-secondary-content-dark" />
                   <p className="text-sm text-secondary-content-dark capitalize">
-                    {format(courseData.attributes.createdAt, "Created on  dd MMM yyyy")}
+                    {format(courseData.attributes.createdAt, "'Created on '  dd MMM yyyy")}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <HiOutlineCalendar className="text-secondary-content-dark" />
                   <p className="text-sm text-secondary-content-dark capitalize">
-                    {format(courseData.attributes.updatedAt, "Updated at  dd MMM yyyy")}
+                    {format(courseData.attributes.updatedAt, "'Updated at ' dd MMM yyyy")}
                   </p>
                 </div>
               </div>
@@ -142,9 +144,51 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
             <div className="flex items-center justify-between">
               <p className="font-semibold text-2xl">Learning Path Content</p>
             </div>
-            {courseSectionsData.data.map(courseSection => (
-              <CourseContentSection key={courseSection.id} data={courseSection} />
-            ))}
+
+            {courseSectionsData.data.length > 0 ? (
+              <>
+                {courseSectionsData.data.map(courseSection => (
+                  <CourseContentSection key={courseSection.id} data={courseSection} />
+                ))}
+              </>
+            ) : (
+              <p className="text-sm text-secondary-base-dark">No content found</p>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="col-span-4">
+        <div className="flex flex-col gap-6">
+          {/* Preview Video */}
+          <div className="border border-primary-border bg-secondary-base-dark rounded-lg">
+            <img
+              src={`${process.env.STRAPI_BASE_URL}${courseData.attributes.cover_images.data.attributes.url}`}
+              className="w-full rounded-t-lg object-cover h-[240px]"
+            ></img>
+            <Link
+              href={courseData.attributes.preview_video_link}
+              className="rounded-b-lg py-4 flex items-center justify-center gap-2 text-secondary-content-dark hover:text-primary transition-all"
+            >
+              <FaVideo />
+              <p className="text-sm font-medium">Preview Learning</p>
+            </Link>
+          </div>
+
+          {/* Unlock Learning Path */}
+          <div className="border border-primary-border bg-secondary-base-dark rounded-lg">
+            <div className="bg-tertiary-base-dark p-4">
+              <p className="text-secondary-content-dark text-center">
+                Unlock all{" "}
+                <span className="text-primary-dark">{categoryData.attributes.title}</span> learning
+                path start from only <span className="text-white">Rp250.000 / month</span>
+              </p>
+            </div>
+            <div className="p-4 flex flex-col gap-4">
+              <button className="w-full py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center justify-center gap-2">
+                <FaGraduationCap className="w-5 h-5" />
+                <p>Unlock Learning Path</p>
+              </button>
+            </div>
           </div>
         </div>
       </div>
