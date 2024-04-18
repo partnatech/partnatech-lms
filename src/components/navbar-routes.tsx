@@ -31,7 +31,7 @@ export const NavbarRoutes = ({ user, setSidebarOpen, showSidebar = true }: Navba
   const firstWord = getFirstWordBeforeSpace(user?.name || "")
 
   return (
-    <div className="w-full sticky top-0 z-40 flex py-6 shrink-0 items-center gap-x-4 border-b border-gray-200 dark:border-line-primary bg-gray-50 dark:bg-background-primary px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+    <div className="w-full sticky top-0 z-40 flex py-6 shrink-0 items-center gap-x-4 border-b border-primary-border bg-primary-base-dark px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
       {showSidebar && (
         <button
           type="button"

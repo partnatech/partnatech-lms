@@ -1,5 +1,5 @@
-import { AcademicCapIcon } from "@heroicons/react/24/solid";
-import React from "react";
+import { AcademicCapIcon } from "@heroicons/react/24/solid"
+import React from "react"
 
 const LearnDetailPage = () => {
   return (
@@ -17,17 +17,19 @@ const LearnDetailPage = () => {
               Prisma & Free Databases (MySQL, Postgres & Mongo)
             </p>
             <p className="text-sm text-muted-foreground mb-4">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam delectus reprehenderit reiciendis
-              aspernatur ipsa vitae quisquam inventore id pariatur. Nisi assumenda voluptas veritatis culpa fugiat,
-              omnis illo dolorem hic harum.
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quam delectus reprehenderit
+              reiciendis aspernatur ipsa vitae quisquam inventore id pariatur. Nisi assumenda
+              voluptas veritatis culpa fugiat, omnis illo dolorem hic harum.
             </p>
           </div>
         </div>
 
         <div className="order-2 lg:col-span-2 flex flex-col space-y-6">
-          <div className="border border-gray-200 dark:border-gray-700 rounded-md p-6 text-secondary bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-indigo-900 via-indigo-950 to-gray-900">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-md p-6 text-secondary-content-dark bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-indigo-900 via-indigo-950 to-gray-900">
             <div className="mb-7">
-              <h4 className="font-semibold text-xl mb-4 text-neutral-200">Ready to start building?</h4>
+              <h4 className="font-semibold text-xl mb-4 text-neutral-200">
+                Ready to start building?
+              </h4>
               <p className="text-sm text-neutral-200">
                 Track your progress, watch with subtitles, change quality &amp; speed, and more.
               </p>
@@ -42,7 +44,7 @@ const LearnDetailPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LearnDetailPage;
+export default LearnDetailPage

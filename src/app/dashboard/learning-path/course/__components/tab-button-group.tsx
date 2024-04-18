@@ -32,14 +32,14 @@ const TabButtonGroup = () => {
   }, [])
 
   return (
-    <div className="border-b border-line-secondary w-full flex">
+    <div className="border-b border-secondary-border w-full flex">
       {TAB_LIST.map(tab => (
         <Link
           key={tab.href}
           href={tab.href}
           onClick={() => setHash(tab.href)}
           className={cn(
-            hash === tab.href ? " border-primary" : "border-transparent",
+            hash === tab.href ? " border-primary-dark-border" : "border-transparent",
             "px-6 text-sm py-4 border-b "
           )}
         >

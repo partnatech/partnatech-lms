@@ -31,7 +31,7 @@ const LearningPathPage = async () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-sm text-typography-secondary">
+      <p className="text-sm text-secondary-content-dark">
         Guiding you through structured pathways for achieving your expert goals efficiently.
       </p>
 
@@ -40,7 +40,7 @@ const LearningPathPage = async () => {
           <Link
             key={category.id}
             href={`/dashboard/learning-path/${category.id}`}
-            className="bg-background-secondary border border-line-primary hover:border-primary/50 transition-all p-6 rounded-lg flex flex-col gap-4"
+            className="bg-background-secondary border border-primary-border hover:border-primary-dark-border/50 transition-all p-6 rounded-lg flex flex-col gap-4"
           >
             <div className="flex justify-between items-start">
               <img
@@ -55,15 +55,15 @@ const LearningPathPage = async () => {
 
             <p className="text-lg">{category.attributes.title}</p>
 
-            <p className="text-sm text-typography-secondary">{category.attributes.description}</p>
+            <p className="text-sm text-secondary-content-dark">{category.attributes.description}</p>
 
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-typography-secondary">
+              <div className="flex items-center gap-2 text-secondary-content-dark">
                 <FaVideo className="w-4 h-4" />
                 <p className="text-xs">{category.attributes.total_lesson} Lessons</p>
               </div>
 
-              <div className="flex items-center gap-2 text-typography-secondary">
+              <div className="flex items-center gap-2 text-secondary-content-dark">
                 <FaClock className="w-4 h-4" />
                 <p className="text-xs">{formatDuration(category.attributes.total_duration)}</p>
               </div>

@@ -24,7 +24,7 @@ export const SidebarItem = ({ menu }: SidebarItemProps) => {
         href={menu.href}
         className={cn(
           isActive
-            ? "bg-[#fafafa] dark:bg-background-tertiary text-primary border border-[#ededed] dark:border-[#302F31]"
+            ? "bg-tertiary-base-dark text-primary border border-[#ededed] dark:border-[#302F31]"
             : "dark:text-[#A1A1AA] text-gray-800 hover:text-primary hover:bg-[#242427] border border-transparent hover:border-[#302F31]",
           "group flex gap-x-3 rounded-md p-3 text-sm leading-6"
         )}

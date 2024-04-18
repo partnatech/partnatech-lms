@@ -43,13 +43,13 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
           <div className="flex flex-col gap-6">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-xs">
-              <Link href="/dashboard/learning-path" className="text-typography-secondary">
+              <Link href="/dashboard/learning-path" className="text-secondary-content-dark">
                 Learning Path
               </Link>
               <p>/</p>
               <Link
                 href={`/dashboard/learning-path/${categoryData.id}`}
-                className="text-typography-secondary"
+                className="text-secondary-content-dark"
               >
                 {categoryData.attributes.title}
               </Link>
@@ -60,28 +60,28 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
             {/* Title Section */}
             <div className="flex flex-col gap-4">
               <p className="font-semibold text-[28px]">{courseData.attributes.title}</p>
-              <p className="text-typography-secondary text-sm">
+              <p className="text-secondary-content-dark text-sm">
                 {courseData.attributes.short_descriptions}
               </p>
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <DifficulityIcon type={courseData.attributes.difficulty} />
-                  <p className="text-sm text-typography-secondary capitalize">
+                  <p className="text-sm text-secondary-content-dark capitalize">
                     {courseData.attributes.difficulty}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <HiOutlineCalendar className="text-typography-secondary" />
-                  <p className="text-sm text-typography-secondary capitalize">
+                  <HiOutlineCalendar className="text-secondary-content-dark" />
+                  <p className="text-sm text-secondary-content-dark capitalize">
                     {format(courseData.attributes.createdAt, "'Created on ' dd MMM yyyy")}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <HiOutlineCalendar className="text-typography-secondary" />
-                  <p className="text-sm text-typography-secondary capitalize">
+                  <HiOutlineCalendar className="text-secondary-content-dark" />
+                  <p className="text-sm text-secondary-content-dark capitalize">
                     {format(courseData.attributes.updatedAt, "'Updated at ' dd MMM yyyy")}
                   </p>
                 </div>
@@ -94,7 +94,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
 
           <div id="about" className="flex flex-col gap-4">
             <p className="font-semibold text-2xl">About</p>
-            <p className="text-typography-secondary text-sm">
+            <p className="text-secondary-content-dark text-sm">
               {courseData.attributes.descriptions}
             </p>
           </div>
@@ -103,7 +103,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
             <p className="font-semibold text-2xl">What you'll learn</p>
             <div className="grid grid-cols-2 gap-4">
               {courseData.attributes.list_of_learning.map(item => (
-                <div key={item} className="flex items-center gap-2 text-typography-secondary">
+                <div key={item} className="flex items-center gap-2 text-secondary-content-dark">
                   <FaCheck className="w-5 h-5" />
                   <p className=" text-sm">{item}</p>
                 </div>
@@ -117,7 +117,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
               {toolsUsedData.map(tool => (
                 <div
                   key={tool.id}
-                  className="bg-background-secondary border border-line-primary p-6 rounded-lg"
+                  className="bg-background-secondary border border-primary-border p-6 rounded-lg"
                 >
                   <img
                     src={`${process.env.STRAPI_BASE_URL}${tool.icons.data.attributes.url}`}
@@ -126,7 +126,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
 
                   <div className="mb-4">
                     <p className="text-sm mb-2">{tool.title}</p>
-                    <p className="text-xs text-typography-secondary">{tool.description}</p>
+                    <p className="text-xs text-secondary-content-dark">{tool.description}</p>
                   </div>
 
                   <Link href={tool.link} className="text-primary flex items-center gap-2">
