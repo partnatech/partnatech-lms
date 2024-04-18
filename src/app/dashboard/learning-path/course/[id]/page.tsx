@@ -75,14 +75,14 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
                 <div className="flex items-center gap-2">
                   <HiOutlineCalendar className="text-secondary-content-dark" />
                   <p className="text-sm text-secondary-content-dark capitalize">
-                    {format(courseData.attributes.createdAt, "'Created on ' dd MMM yyyy")}
+                    {format(courseData.attributes.createdAt, "Created on  dd MMM yyyy")}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <HiOutlineCalendar className="text-secondary-content-dark" />
                   <p className="text-sm text-secondary-content-dark capitalize">
-                    {format(courseData.attributes.updatedAt, "'Updated at ' dd MMM yyyy")}
+                    {format(courseData.attributes.updatedAt, "Updated at  dd MMM yyyy")}
                   </p>
                 </div>
               </div>
@@ -100,7 +100,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
           </div>
 
           <div id="lesson" className="flex flex-col gap-4">
-            <p className="font-semibold text-2xl">What you'll learn</p>
+            <p className="font-semibold text-2xl">What you will learn</p>
             <div className="grid grid-cols-2 gap-4">
               {courseData.attributes.list_of_learning.map(item => (
                 <div key={item} className="flex items-center gap-2 text-secondary-content-dark">
@@ -143,7 +143,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
               <p className="font-semibold text-2xl">Learning Path Content</p>
             </div>
             {courseSectionsData.data.map(courseSection => (
-              <CourseContentSection data={courseSection} />
+              <CourseContentSection key={courseSection.id} data={courseSection} />
             ))}
           </div>
         </div>
