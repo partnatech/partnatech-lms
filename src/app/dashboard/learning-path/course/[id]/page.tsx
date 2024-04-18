@@ -131,7 +131,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
                     <p className="text-xs text-secondary-content-dark">{tool.description}</p>
                   </div>
 
-                  <Link href={tool.link} className="text-primary flex items-center gap-2">
+                  <Link href={tool.link} className="text-primary-dark flex items-center gap-2">
                     Download
                     <HiMiniArrowUpRight className="w-5 h-5" />
                   </Link>
