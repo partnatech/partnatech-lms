@@ -1,4 +1,4 @@
-import DifficulityIcon from "@/app/dashboard/_components/difficulity-icon"
+import DifficulityIcon from "@/components/difficulity-icon"
 import { StrapiResponse } from "@/types/strapi"
 import { CourseResponse } from "@/types/strapi/course"
 import Link from "next/link"

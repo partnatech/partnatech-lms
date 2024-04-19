@@ -6,7 +6,7 @@ import Link from "next/link"
 import qs from "qs"
 import React from "react"
 import { FaArrowLeft, FaCheck, FaClock, FaGraduationCap, FaVideo } from "react-icons/fa6"
-import DifficulityIcon from "../../_components/difficulity-icon"
+import DifficulityIcon from "../../../../components/difficulity-icon"
 
 interface CourseCardProps {
   data: DataWrapper<Course>
