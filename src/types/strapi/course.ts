@@ -26,6 +26,16 @@ export interface CourseSection {
   }
 }
 
+export interface CourseReview {
+  name: string
+  rating: number
+  content: string
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+  avatar: Image
+}
+
 export interface Course {
   title: string
   slug: string
@@ -52,5 +62,8 @@ export interface Course {
   }
   course_sections: {
     data: DataWrapper<CourseSection>[]
+  }
+  course_reviews: {
+    data: DataWrapper<CourseReview>[]
   }
 }
