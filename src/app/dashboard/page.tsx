@@ -1,9 +1,9 @@
-import Image from "next/image";
-import React from "react";
+import Image from "next/image"
+import React, { useEffect } from "react"
 
-import Link from "next/link";
-import { CourseCard } from "@/components/course-card";
-import StatCards from "./(home)/_components/statCards";
+import Link from "next/link"
+import { CourseCard } from "@/components/course-card"
+import StatCards from "./(home)/_components/statCards"
 
 const bootcampItems = [
   {
@@ -54,12 +54,12 @@ const bootcampItems = [
     mentorImage: "/images/mentor.png",
     chapter: "12",
   },
-];
+]
 
 const HomePage = () => {
   return (
     <div>
-      <StatCards />
+      {/* <StatCards />
       <div className="relative isolate overflow-hidden mt-12 bg-gray-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
         <svg
           viewBox="0 0 1024 1024"
@@ -87,9 +87,8 @@ const HomePage = () => {
             Join our learning community today.
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-300">
-            Unlock the full potential of digital technology with our
-            comprehensive courses. From coding to design, advance your skills at
-            your own pace.
+            Unlock the full potential of digital technology with our comprehensive courses. From
+            coding to design, advance your skills at your own pace.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
             <Link
@@ -117,13 +116,13 @@ const HomePage = () => {
           />
         </div>
       </div>
-      {/* <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {bootcampItems.map((item) => (
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+        {bootcampItems.map(item => (
           <CourseCard key={item.id} course={item} />
         ))}
       </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
