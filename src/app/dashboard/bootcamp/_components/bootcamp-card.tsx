@@ -4,10 +4,12 @@ import { formatDateRange } from "@/utils/date"
 import { formatNumberToCurrency } from "@/utils/currency"
 import { CalendarIcon, MapPinIcon, ChartBarIcon, CheckIcon } from "@heroicons/react/16/solid"
 import Image from "next/image"
+import { MentorCard } from "./mentor-card"
+import Link from "next/link"
 
 export const BootcampCard = (props: BootcampResponse) => {
   return (
-    <div className="grid md:grid-cols-3 gap-4 bg-slate-800">
+    <div className="grid md:grid-cols-3 gap-4 bg-secondary-base border-primary-border dark:bg-secondary-base-dark border">
       <div className="w-full h-full relative">
         <Image
           src={`${process.env.STRAPI_BASE_URL}${props.attributes.cover_image?.data?.attributes?.url}`}
@@ -68,26 +70,16 @@ export const BootcampCard = (props: BootcampResponse) => {
           <span className="text-secondary-content dark:text-secondary-content-dark text-xs">
             Mentor :
           </span>
-          <div className="flex items-center space-x-2">
-            <Image src="/images/mentor.png" alt="mentor" width={48} height={48}></Image>
-            <div>
-              <p className="text-sm">Rahardian Rizki</p>
-              <span className="text-xs text-secondary-content dark:text-secondary-content-dark">
-                Data Engineer Lead
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Image src="/images/mentor.png" alt="mentor" width={48} height={48}></Image>
-            <div>
-              <p className="text-sm">Timothy Ronald</p>
-              <span className="text-xs text-secondary-content dark:text-secondary-content-dark">
-                Data Engineer Expert
-              </span>
-            </div>
-          </div>
+          {props.attributes.mentors.data.map((mentor, idx) => (
+            <MentorCard
+              key={`mentor-${idx}`}
+              mentorImage={mentor.attributes.avatar}
+              mentorSlug={mentor.attributes.slug}
+              mentorName={mentor.attributes.name}
+              mentorDescription={mentor.attributes.role}
+            />
+          ))}
         </div>
-
         <div className="flex justify-between items-center">
           <div>
             <div className="w-64 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden mt-8 mb-2">
@@ -101,6 +93,7 @@ export const BootcampCard = (props: BootcampResponse) => {
           </div>
 
           <button className="w-max py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center gap-2">
+            <Link href={`/dashboard/bootcamp/${props.attributes.slug}`}>Join bootcamp</Link>
             {/* <p> {props.category === "ENROLLED" ? "View Bootcamp" : "Join Bootcamp"}</p> */}
           </button>
         </div>

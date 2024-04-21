@@ -2,9 +2,10 @@ import React from "react"
 import { BootcampCard } from "./_components/bootcamp-card"
 import { Tab, Tabs } from "@/components/tabs"
 import qs from "qs"
-import { ChevronUpDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+
 import { StrapiResponse } from "@/types/strapi"
 import { BootcampResponse } from "@/types/strapi/bootcamp"
+import BootcampSearch from "./_components/bootcamp-search"
 
 const bootcampItems = [
   {
@@ -57,7 +58,13 @@ const metadata = {
     "Become a data wizard! Sharpen your analytical skills, business mindset, and communication skills to unravel complex business mysteries with data.",
 }
 
-const fetchBootcampsFromStrapi = async () => {
+const fetchBootcampsFromStrapi = async (isAvailable: boolean) => {
+  let startDateFilter = {}
+  if (isAvailable) {
+    startDateFilter = { $gte: new Date() }
+  } else {
+    startDateFilter = { $lte: new Date() }
+  }
   const query = qs.stringify({
     sort: ["title:asc"],
     populate: "*",
@@ -65,6 +72,9 @@ const fetchBootcampsFromStrapi = async () => {
     pagination: {
       pageSize: 10,
       page: 1,
+    },
+    filters: {
+      start_date: startDateFilter,
     },
     publicationState: "live",
     locale: ["en"],
@@ -75,19 +85,39 @@ const fetchBootcampsFromStrapi = async () => {
   const strapiResponse: StrapiResponse<BootcampResponse[]> = await response.json()
   return strapiResponse
 }
-const BootcampPage = async () => {
-  const bootcampsResponse = await fetchBootcampsFromStrapi()
-  const listBootcamps = bootcampsResponse.data
+const BootcampPage = async ({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}) => {
+  const availableBootcampsResponse = await fetchBootcampsFromStrapi(true)
+  const listAvailableBootcamps = availableBootcampsResponse.data
+  const availableBootcampCount = availableBootcampsResponse.data.length || 0
+
+  const expiredBootcampsResponse = await fetchBootcampsFromStrapi(false)
+  const listExpiredBootcamps = expiredBootcampsResponse.data
+  const expiredBootcampCount = availableBootcampsResponse.data.length || 0
+
+  console.log("params", params)
+  console.log("searchParams", searchParams)
+
   const tabs: Tab[] = [
     {
       name: "Available Bootcamp",
-      total: "2",
+      total: availableBootcampCount as unknown as string,
       href: `#available`,
       current: true,
     },
-    { name: "Expired", total: "0", href: `#expired`, current: false },
+    {
+      name: "Expired",
+      total: expiredBootcampCount as unknown as string,
+      href: `#expired`,
+      current: false,
+    },
   ]
-
+  console.log(tabs)
   return (
     <div className="max-w-screen-xl mx-auto">
       {/* Header */}
@@ -111,29 +141,24 @@ const BootcampPage = async () => {
 
         {/* Search */}
         <div className="grid md:grid-cols-2">
-          <div className="flex space-x-4">
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <MagnifyingGlassIcon className="w-4 h-4" />
-              </div>
-              <input
-                type="search"
-                className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary dark:focus:border-primary"
-                placeholder="Search bootcamp"
-              />
-            </div>
-            <button className="flex items-center space-x-2 text-gray-900 border-gray-300 rounded-lg text-xs px-4 py-2 w-ful bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400">
-              Sort by : Latest <ChevronUpDownIcon className="w-4- h-4" />
-            </button>
-          </div>
+          <BootcampSearch />
         </div>
 
         {/* End of Search */}
 
         {/* Card List */}
-        {listBootcamps.map(item => (
-          <BootcampCard key={item.attributes.slug} {...item} />
-        ))}
+        <div id="available">
+          {listAvailableBootcamps.map(item => (
+            <BootcampCard key={item.attributes.slug} {...item} />
+          ))}
+        </div>
+
+        <div id="expired">
+          {listExpiredBootcamps.map(item => (
+            <BootcampCard key={item.attributes.slug} {...item} />
+          ))}
+        </div>
+
         {/* End of Card List */}
       </div>
     </div>
