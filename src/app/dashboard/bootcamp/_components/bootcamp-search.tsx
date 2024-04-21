@@ -1,13 +1,14 @@
 "use client"
 import { SetStateAction, useState } from "react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
-import { ChevronUpDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+import { ChevronUpIcon, ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 
 const BootcampSearch = () => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
   const [searchInput, setSearchInput] = useState("")
+  const [sortBy, setSortBy] = useState("latest")
 
   const handleInputChange = (event: { target: { value: SetStateAction<string> } }) => {
     setSearchInput(event.target.value)
@@ -24,7 +25,23 @@ const BootcampSearch = () => {
     replace(`${pathname}?${params.toString()}`)
   }
 
-  const handleSort = () => {}
+  const handleSort = () => {
+    // Toggle between sorting by latest and earliest
+    if (sortBy === "latest") {
+      setSortBy("earliest")
+    } else {
+      setSortBy("latest")
+    }
+
+    const params = new URLSearchParams(searchParams)
+    if (sortBy === "latest") {
+      params.set("orderBy", "desc")
+    } else {
+      params.set("orderBy", "asc")
+    }
+
+    replace(`${pathname}?${params.toString()}`)
+  }
   return (
     <div className="flex space-x-4">
       <div className="relative">
@@ -46,10 +63,15 @@ const BootcampSearch = () => {
         />
       </div>
       <button
-        className="flex w-fit items-center space-x-2 text-gray-900 border-gray-300 rounded-lg text-xs px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400"
+        className="flex w-fit items-center space-x-4 text-gray-900 border-gray-300 rounded-lg text-xs px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400"
         onClick={handleSort}
       >
-        Sort by : Latest <ChevronUpDownIcon className="w-4 h-4" />
+        Sort by: {sortBy === "latest" ? "Latest" : "Earliest"}{" "}
+        {sortBy === "latest" ? (
+          <ChevronUpIcon className="w-4 h-4 ml-2" />
+        ) : (
+          <ChevronDownIcon className="w-4 h-4 ml-2" />
+        )}
       </button>
     </div>
   )
