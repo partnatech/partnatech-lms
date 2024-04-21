@@ -11,7 +11,7 @@ export type Tab = {
 
 type TabsProps = {
   tabs: Array<Tab>
-  onTabChange: (tabs: Array<Tab>) => void
+  onTabChange?: (tabs: Array<Tab>) => void
 }
 
 export const Tabs = (props: TabsProps) => {
