@@ -58,30 +58,40 @@ const metadata = {
     "Become a data wizard! Sharpen your analytical skills, business mindset, and communication skills to unravel complex business mysteries with data.",
 }
 
-const fetchBootcampsFromStrapi = async (isAvailable: boolean) => {
+const fetchBootcampsFromStrapi = async (
+  isAvailable: boolean,
+  title?: string,
+  orderBy: string = "desc"
+) => {
   let startDateFilter = {}
   if (isAvailable) {
     startDateFilter = { $gte: new Date() }
   } else {
     startDateFilter = { $lte: new Date() }
   }
+
+  let filters: any = {
+    start_date: startDateFilter,
+    title: { $containsi: title },
+  }
+
   const query = qs.stringify({
-    sort: ["title:asc"],
+    sort: [`start_date:${orderBy}`],
     populate: "*",
     fields: "*",
     pagination: {
       pageSize: 10,
       page: 1,
     },
-    filters: {
-      start_date: startDateFilter,
-    },
+    filters: filters,
     publicationState: "live",
     locale: ["en"],
   })
+
   const response = await fetch(`${process.env.STRAPI_BASE_URL}/api/bootcamps?${query}`, {
     cache: "no-store",
   })
+
   const strapiResponse: StrapiResponse<BootcampResponse[]> = await response.json()
   return strapiResponse
 }
@@ -90,18 +100,18 @@ const BootcampPage = async ({
   searchParams,
 }: {
   params: { slug: string }
-  searchParams?: { [key: string]: string | string[] | undefined }
+  searchParams?: { [key: string]: string | undefined }
 }) => {
-  const availableBootcampsResponse = await fetchBootcampsFromStrapi(true)
+  const title = searchParams?.title
+  const orderBy = searchParams?.orderBy
+
+  const availableBootcampsResponse = await fetchBootcampsFromStrapi(true, title, orderBy)
   const listAvailableBootcamps = availableBootcampsResponse.data
-  const availableBootcampCount = availableBootcampsResponse.data.length || 0
+  const availableBootcampCount = availableBootcampsResponse.meta.pagination.total
 
-  const expiredBootcampsResponse = await fetchBootcampsFromStrapi(false)
+  const expiredBootcampsResponse = await fetchBootcampsFromStrapi(false, title, orderBy)
   const listExpiredBootcamps = expiredBootcampsResponse.data
-  const expiredBootcampCount = availableBootcampsResponse.data.length || 0
-
-  console.log("params", params)
-  console.log("searchParams", searchParams)
+  const expiredBootcampCount = expiredBootcampsResponse.meta.pagination.total
 
   const tabs: Tab[] = [
     {
@@ -117,7 +127,7 @@ const BootcampPage = async ({
       current: false,
     },
   ]
-  console.log(tabs)
+
   return (
     <div className="max-w-screen-xl mx-auto">
       {/* Header */}
@@ -148,15 +158,15 @@ const BootcampPage = async ({
 
         {/* Card List */}
         <div id="available">
-          {listAvailableBootcamps.map(item => (
-            <BootcampCard key={item.attributes.slug} {...item} />
-          ))}
+          {listAvailableBootcamps &&
+            listAvailableBootcamps.map(item => (
+              <BootcampCard key={item.attributes.slug} {...item} />
+            ))}
         </div>
 
         <div id="expired">
-          {listExpiredBootcamps.map(item => (
-            <BootcampCard key={item.attributes.slug} {...item} />
-          ))}
+          {listExpiredBootcamps &&
+            listExpiredBootcamps.map(item => <BootcampCard key={item.attributes.slug} {...item} />)}
         </div>
 
         {/* End of Card List */}
