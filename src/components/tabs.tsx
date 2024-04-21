@@ -25,7 +25,9 @@ export const Tabs = (props: TabsProps) => {
     }))
     setTabsState(newTabs)
     // Call the onTabChange function from the parent with the updated state
-    onTabChange(newTabs)
+    if (onTabChange) {
+      onTabChange(newTabs)
+    }
   }
 
   return (
