@@ -1,10 +1,10 @@
-import React from "react";
-import { BootcampCard } from "./_components/bootcamp-card";
-import { Tab, Tabs } from "@/components/tabs";
-import {
-  ChevronUpDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+import React from "react"
+import { BootcampCard } from "./_components/bootcamp-card"
+import { Tab, Tabs } from "@/components/tabs"
+import qs from "qs"
+import { ChevronUpDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
+import { StrapiResponse } from "@/types/strapi"
+import { BootcampResponse } from "@/types/strapi/bootcamp"
 
 const bootcampItems = [
   {
@@ -49,15 +49,35 @@ const bootcampItems = [
     nextStepLink: "/bootcamp", //LINK BOOTCAMP
     mentorImage: "/images/mentor.png",
   },
-];
+]
 
 const metadata = {
   title: "Bootcamp",
   description:
     "Become a data wizard! Sharpen your analytical skills, business mindset, and communication skills to unravel complex business mysteries with data.",
-};
+}
 
-const BootcampPage = () => {
+const fetchBootcampsFromStrapi = async () => {
+  const query = qs.stringify({
+    sort: ["title:asc"],
+    populate: "*",
+    fields: "*",
+    pagination: {
+      pageSize: 10,
+      page: 1,
+    },
+    publicationState: "live",
+    locale: ["en"],
+  })
+  const response = await fetch(`${process.env.STRAPI_BASE_URL}/api/bootcamps?${query}`, {
+    cache: "no-store",
+  })
+  const strapiResponse: StrapiResponse<BootcampResponse[]> = await response.json()
+  return strapiResponse
+}
+const BootcampPage = async () => {
+  const bootcampsResponse = await fetchBootcampsFromStrapi()
+  const listBootcamps = bootcampsResponse.data
   const tabs: Tab[] = [
     {
       name: "Available Bootcamp",
@@ -66,7 +86,7 @@ const BootcampPage = () => {
       current: true,
     },
     { name: "Expired", total: "0", href: `#expired`, current: false },
-  ];
+  ]
 
   return (
     <div className="max-w-screen-xl mx-auto">
@@ -111,13 +131,13 @@ const BootcampPage = () => {
         {/* End of Search */}
 
         {/* Card List */}
-        {bootcampItems.map((item) => (
-          <BootcampCard key={item.id} {...item} />
+        {listBootcamps.map(item => (
+          <BootcampCard key={item.attributes.slug} {...item} />
         ))}
         {/* End of Card List */}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BootcampPage;
+export default BootcampPage

@@ -14,8 +14,14 @@ const nextConfig = {
         port: "",
         pathname: "**",
       },
+      {
+        protocol: "http",
+        hostname: "34.133.45.178",
+        port: "",
+        pathname: "**",
+      },
     ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

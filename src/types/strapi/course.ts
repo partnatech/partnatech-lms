@@ -1,7 +1,7 @@
 import { DataWrapper, Image } from "."
 import { Category } from "./category"
+import { Difficulty } from "./difficulty"
 
-export type Difficulty = "beginner" | "intermediate" | "advance"
 export type CourseResponse = DataWrapper<Course>
 
 export interface CourseContentItem {
