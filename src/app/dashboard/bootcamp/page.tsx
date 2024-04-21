@@ -96,10 +96,8 @@ const fetchBootcampsFromStrapi = async (
   return strapiResponse
 }
 const BootcampPage = async ({
-  params,
   searchParams,
 }: {
-  params: { slug: string }
   searchParams?: { [key: string]: string | undefined }
 }) => {
   const title = searchParams?.title
