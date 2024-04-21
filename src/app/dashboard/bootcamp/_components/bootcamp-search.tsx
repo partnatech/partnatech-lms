@@ -3,7 +3,7 @@ import { SetStateAction, useState } from "react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import { ChevronUpIcon, ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 
-const BootcampSearch = () => {
+export const BootcampSearch = () => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -76,5 +76,3 @@ const BootcampSearch = () => {
     </div>
   )
 }
-
-export default BootcampSearch

@@ -5,24 +5,27 @@ import { useState } from "react"
 export type Tab = {
   name: string
   total?: string
-  href?: string
+  href: string
   current: boolean
 }
 
 type TabsProps = {
   tabs: Array<Tab>
+  onTabChange: (tabs: Array<Tab>) => void
 }
 
 export const Tabs = (props: TabsProps) => {
-  const { tabs } = props
+  const { tabs, onTabChange } = props
   const [tabsState, setTabsState] = useState(tabs)
 
-  const onTabChange = (tab: Tab) => {
+  const handleTabChange = (tab: Tab) => {
     const newTabs = tabsState.map(t => ({
       ...t,
       current: t.name === tab.name,
     }))
     setTabsState(newTabs)
+    // Call the onTabChange function from the parent with the updated state
+    onTabChange(newTabs)
   }
 
   return (
@@ -41,7 +44,7 @@ export const Tabs = (props: TabsProps) => {
             e.preventDefault()
             const tab = tabs.find(t => t.name === e.target.value)
             if (tab) {
-              onTabChange(tab)
+              handleTabChange(tab)
             }
           }}
         >
@@ -65,7 +68,7 @@ export const Tabs = (props: TabsProps) => {
                 )}
                 aria-current={tab.current ? "page" : undefined}
                 onClick={() => {
-                  onTabChange(tab)
+                  handleTabChange(tab)
                 }}
               >
                 {tab.name}{" "}
