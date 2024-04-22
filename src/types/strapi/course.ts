@@ -1,8 +1,10 @@
 import { DataWrapper, Image } from "."
 import { Category } from "./category"
+import { Mentor } from "./mentor"
 
 export type Difficulty = "beginner" | "intermediate" | "advance"
 export type CourseResponse = DataWrapper<Course>
+export type CourseContentItemResponse = DataWrapper<CourseContentItem>
 
 export interface CourseContentItem {
   title: string
@@ -65,5 +67,8 @@ export interface Course {
   }
   course_reviews: {
     data: DataWrapper<CourseReview>[]
+  }
+  mentors: {
+    data: DataWrapper<Mentor>[]
   }
 }
