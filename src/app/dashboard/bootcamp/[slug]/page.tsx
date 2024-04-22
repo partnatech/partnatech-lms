@@ -1,12 +1,14 @@
-import { Breadcrumb, BreadcrumbPage } from "@/components/breadcrumb"
-import { Tab, Tabs } from "@/components/tabs"
-import { CheckIcon } from "@heroicons/react/16/solid"
-import { BootcampDetailHeader } from "../_components/bootcamp-header"
-import { MentorCard } from "../_components/mentor-card"
-import { ContentContainer } from "../_components/content-container"
-import { ScheduleCards } from "../_components/schedule-cards"
-import { CurriculumAccordion } from "../_components/curriculum-accordion"
-import { bootcamp } from "@/lib/constants/bootcamp-detail-sample"
+import { Breadcrumb, BreadcrumbPage } from "@/components/breadcrumb";
+import { Tab, Tabs } from "@/components/tabs";
+import { CheckIcon } from "@heroicons/react/16/solid";
+import { BootcampDetailHeader } from "../_components/bootcamp-header";
+import { MentorCard } from "../_components/mentor-card";
+import { ContentContainer } from "../_components/content-container";
+import { ScheduleCards } from "../_components/schedule-cards";
+import { CurriculumAccordion } from "../_components/curriculum-accordion";
+import { bootcamp } from "@/lib/constants/bootcamp-detail-sample";
+import CtaCard from "../_components/cta-card";
+import BootcampTags from "../_components/bootcamp-tags";
 
 const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
   const { slug } = params
@@ -83,16 +85,18 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
           </ContentContainer>
         </div>
       </div>
-
-      {/* Right Pane Placeholder */}
-      <div className="sticky top-20 hidden w-96 shrink-0 lg:block bg-gray-200 dark:bg-gray-800 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-primary-content dark:text-primary-content-dark mb-4">
-          Bootcamp Card
-        </h3>
-        <p className="text-sm text-secondary-content dark:text-secondary-content-dark">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget euismod nibh. Nullam
-          euismod, turpis nec vehicula.
-        </p>
+    {/* Right Pane Placeholder */}
+    <div className="sticky top-24 hidden w-96 shrink-0 lg:block space-y-6">
+      <CtaCard
+        imageUrl={bootcamp.headerImage}
+        price={bootcamp.price}
+        discountPrice={bootcamp.discountPrice}
+        quota={bootcamp.quota}
+        enrolled={bootcamp.enrolled}
+      />
+      <div className="space-y-4">
+        <p className="text-lg font-medium text-primary-content dark:text-primary-content-dark">Skill you&apos;ll gain</p>
+        <BootcampTags tags={bootcamp.tags} />
       </div>
     </div>
   )
