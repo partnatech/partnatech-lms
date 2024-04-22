@@ -1,4 +1,4 @@
-import { Difficulty } from "@/types/strapi/course"
+import { Difficulty } from "@/types/strapi/difficulty"
 import React from "react"
 
 const DifficulityIcon = ({ type }: { type: Difficulty }) => {
@@ -49,7 +49,7 @@ const DifficulityIcon = ({ type }: { type: Difficulty }) => {
   }
 
   return (
-    <div className="relative group">
+    <div className="relative group cursor-pointer">
       <div className="absolute -top-6 -left-6 bg-black/50 py-1 px-2 group-hover:block hidden text-xs capitalize transition-all">
         {type}
       </div>

@@ -5,6 +5,9 @@ export const bootcamp = {
   period: '11 Mar - 11 Apr 2024',
   location: 'Online',
   level: 'Beginner',
+  headerImage: '/images/sample/bootcamp-1.png',
+  price: 3000000,
+  discountPrice: 1500000,
   about: 'Data Analyst menjadi profesi dengan urutan pertama, yang paling dibutuhkan pada tahun 2030 menurut World Economic Forum. Bersiap kembangkan karir melalui pelatihan online secara intensif dan live di Bootcamp Data Analysis. Belajar bersama mentor expert dari Top Companies, dimulai dari level dasar hingga lanjut.',
   benefits: [
     '17x sesi live class bersama mentor experts dari top companies',
@@ -60,5 +63,8 @@ export const bootcamp = {
       materialDescription: 'Mempelajari Big Data Analytics menggunakan Amazon Web Service hingga membuat final projek yang telah ditentukan Hiring Partner.',
       tools: ['docker', 'elasticsearch', 'great-expectations', 'airflow', 'aws', 'spark'],
     },
-  ]
+  ],
+  quota: 100,
+  enrolled: 100,
+  tags: ['Data Science', 'Python Programming', 'Excel', 'Data Mining', 'Github', 'Machine Learning', 'SQL'],
 }

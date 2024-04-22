@@ -1,29 +1,34 @@
-"use client";
-import clsx from "clsx";
-import { useState } from "react";
+"use client"
+import clsx from "clsx"
+import { useState } from "react"
 
 export type Tab = {
-  name: string;
-  total?: string;
-  href: string;
-  current: boolean;
-};
+  name: string
+  total?: string
+  href: string
+  current: boolean
+}
 
 type TabsProps = {
-  tabs: Array<Tab>;
-};
+  tabs: Array<Tab>
+  onTabChange?: (tabs: Array<Tab>) => void
+}
 
 export const Tabs = (props: TabsProps) => {
-  const { tabs } = props;
-  const [tabsState, setTabsState] = useState(tabs);
+  const { tabs, onTabChange } = props
+  const [tabsState, setTabsState] = useState(tabs)
 
-  const onTabChange = (tab: Tab) => {
-    const newTabs = tabsState.map((t) => ({
+  const handleTabChange = (tab: Tab) => {
+    const newTabs = tabsState.map(t => ({
       ...t,
       current: t.name === tab.name,
-    }));
-    setTabsState(newTabs);
-  };
+    }))
+    setTabsState(newTabs)
+    // Call the onTabChange function from the parent with the updated state
+    if (onTabChange) {
+      onTabChange(newTabs)
+    }
+  }
 
   return (
     <div>
@@ -36,16 +41,16 @@ export const Tabs = (props: TabsProps) => {
           id="tabs"
           name="tabs"
           className="block w-full rounded-md border-primary-border py-2 pl-3 pr-10 text-base focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-          defaultValue={tabsState.find((tab) => tab.current)?.name}
-          onChange={(e) => {
-            e.preventDefault();
-            const tab = tabs.find((t) => t.name === e.target.value);
+          defaultValue={tabsState.find(tab => tab.current)?.name}
+          onChange={e => {
+            e.preventDefault()
+            const tab = tabs.find(t => t.name === e.target.value)
             if (tab) {
-              onTabChange(tab);
+              handleTabChange(tab)
             }
           }}
         >
-          {tabsState.map((tab) => (
+          {tabsState.map(tab => (
             <option key={tab.name}>{tab.name}</option>
           ))}
         </select>
@@ -53,7 +58,7 @@ export const Tabs = (props: TabsProps) => {
       <div className="hidden sm:block">
         <div className="border-b border-primary-border">
           <nav className="-mb-px flex" aria-label="Tabs">
-            {tabsState.map((tab) => (
+            {tabsState.map(tab => (
               <a
                 key={tab.name}
                 href={tab.href}
@@ -65,7 +70,7 @@ export const Tabs = (props: TabsProps) => {
                 )}
                 aria-current={tab.current ? "page" : undefined}
                 onClick={() => {
-                  onTabChange(tab);
+                  handleTabChange(tab)
                 }}
               >
                 {tab.name}{" "}
@@ -87,5 +92,5 @@ export const Tabs = (props: TabsProps) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
