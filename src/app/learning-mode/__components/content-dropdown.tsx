@@ -8,12 +8,15 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import React, { useMemo } from "react"
 import { FaChevronDown, FaVideo } from "react-icons/fa6"
+import type { UserCourseContentProgress } from "@prisma/client"
 
 interface ContentDropdownProps {
   data: DataWrapper<CourseSection>
+  courseProgress?: UserCourseContentProgress[]
 }
 
-const ContentDropdown = ({ data }: ContentDropdownProps) => {
+const ContentDropdown = ({ data, courseProgress }: ContentDropdownProps) => {
+  console.log("🚀 ~ ContentDropdown ~ courseProgress:", courseProgress)
   const searchParams = useSearchParams()
 
   const currentVideo = searchParams.get("currentVideo")
@@ -50,41 +53,47 @@ const ContentDropdown = ({ data }: ContentDropdownProps) => {
           <Disclosure.Panel className="rounded-b-lg border border-primary-border w-full">
             {data.attributes.course_content_items.data.length > 0 ? (
               <>
-                {data.attributes.course_content_items.data.map(course => (
-                  <Link
-                    href={`/learning-mode/${data.id}?currentVideo=${course.id}`}
-                    className={cn(
-                      currentVideo === course.id.toString()
-                        ? "bg-primary-dark/5"
-                        : "bg-secondary-base-dark",
-                      "flex items-center justify-between px-5 py-4 border-b border-primary-border  w-full last:border-transparent last:rounded-b-lg hover:bg-primary-dark/5 group transition-all"
-                    )}
-                    key={course.id}
-                  >
-                    <div className="flex flex-col gap-2">
-                      <p
-                        className={cn(
-                          currentVideo === course.id.toString() ? "text-primary-dark" : "",
-                          "text-sm group-hover:text-primary-dark"
-                        )}
-                      >
-                        {course.attributes.title}
-                      </p>
+                {data.attributes.course_content_items.data.map(course => {
+                  const isCompleted = courseProgress?.find(
+                    item => item.courseContentId === course.id
+                  )?.isComplete
 
-                      <div className="flex items-center gap-2">
-                        <FaVideo className="text-secondary-content-dark" />
-                        <p className="text-sm">5 Min</p>
+                  return (
+                    <Link
+                      href={`/learning-mode/${data.id}?currentVideo=${course.id}`}
+                      className={cn(
+                        currentVideo === course.id.toString()
+                          ? "bg-primary-dark/5"
+                          : "bg-secondary-base-dark",
+                        "flex items-center justify-between px-5 py-4 border-b border-primary-border  w-full last:border-transparent last:rounded-b-lg hover:bg-primary-dark/5 group transition-all"
+                      )}
+                      key={course.id}
+                    >
+                      <div className="flex flex-col gap-2">
+                        <p
+                          className={cn(
+                            currentVideo === course.id.toString() ? "text-primary-dark" : "",
+                            "text-sm group-hover:text-primary-dark"
+                          )}
+                        >
+                          {course.attributes.title}
+                        </p>
+
+                        <div className="flex items-center gap-2">
+                          <FaVideo className="text-secondary-content-dark" />
+                          <p className="text-sm">5 Min</p>
+                        </div>
                       </div>
-                    </div>
 
-                    <input
-                      id="default-checkbox"
-                      type="checkbox"
-                      value=""
-                      className="w-4 h-4 text-primary-dark/50 bg-secondary-base-dark border-primary-border rounded focus:ring-primary-dark"
-                    ></input>
-                  </Link>
-                ))}
+                      <input
+                        id="default-checkbox"
+                        type="checkbox"
+                        checked={isCompleted}
+                        className="w-4 h-4 text-primary-dark/50 bg-secondary-base-dark border-primary-border rounded focus:ring-primary-dark"
+                      ></input>
+                    </Link>
+                  )
+                })}
               </>
             ) : (
               <div className="h-[80px] flex items-center justify-center bg-secondary-base-dark  rounded-b-lg">

@@ -22,19 +22,14 @@ const TAB_LIST = [
 ]
 
 const OverviewTab = ({ data }: OverviewTabProps) => {
-  const [hash, setHash] = useState("")
-
-  useEffect(() => {
-    setHash(window.location.hash)
-  }, [])
+  const [hash, setHash] = useState("#overview")
 
   return (
     <>
       <div className="border-b border-secondary-border w-full flex px-8">
         {TAB_LIST.map(tab => (
-          <Link
+          <button
             key={tab.href}
-            href={tab.href}
             onClick={() => setHash(tab.href)}
             className={cn(
               hash === tab.href ? " border-primary-dark text-primary-dark" : "border-transparent",
@@ -42,7 +37,7 @@ const OverviewTab = ({ data }: OverviewTabProps) => {
             )}
           >
             {tab.label}
-          </Link>
+          </button>
         ))}
       </div>
 

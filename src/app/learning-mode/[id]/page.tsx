@@ -2,16 +2,16 @@ import { Logo } from "@/components/logo"
 import UserMenuDropdown from "@/components/user-menu-dropdown"
 import { authOptions } from "@/lib/auth"
 import { StrapiResponse } from "@/types/strapi"
-import { CourseContentItem, CourseContentItemResponse, CourseResponse } from "@/types/strapi/course"
-import { cn } from "@/utils/cn"
-import { Disclosure } from "@headlessui/react"
+import { CourseContentItemResponse, CourseResponse } from "@/types/strapi/course"
+import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import qs from "qs"
 import React from "react"
-import { FaCheck, FaChevronDown, FaTrophy, FaUserGroup } from "react-icons/fa6"
+import { FaCheck, FaTrophy, FaUserGroup } from "react-icons/fa6"
 import ContentDropdown from "../__components/content-dropdown"
 import OverviewTab from "../__components/overview-tab"
+import { revalidatePath } from "next/cache"
 
 interface LearningModeProps {
   params: {
@@ -58,6 +58,19 @@ const fetchCourseContentFromStrapi = async (id: string) => {
   return strapiResponse
 }
 
+const fetchCourseContentProgress = async (contentId: string, userId: string) => {
+  if (!contentId || !userId) return
+
+  const parsedContentId = parseInt(contentId)
+  const response = await prisma.userCourseContentProgress.findMany({
+    where: {
+      courseContentId: parsedContentId,
+      userId,
+    },
+  })
+  return response
+}
+
 const LearningModePage = async ({ params, searchParams }: LearningModeProps) => {
   const currentVideoId = searchParams.currentVideo as string
   const session = await getServerSession(authOptions)
@@ -70,6 +83,38 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
 
   const courseContentResponse = await fetchCourseContentFromStrapi(currentVideoId)
   const courseContentData = courseContentResponse?.data
+
+  const courseContentProgressResponse = await fetchCourseContentProgress(
+    currentVideoId,
+    user?.id ?? ""
+  )
+  const isCourseCompleted = courseContentProgressResponse?.find(
+    item => item.courseContentId === parseInt(currentVideoId)
+  )?.isComplete
+
+  const handleComplete = async () => {
+    "use server"
+
+    const response = await prisma.userCourseContentProgress.findFirst({
+      where: {
+        courseContentId: parseInt(currentVideoId),
+      },
+    })
+
+    if (!response) {
+      await prisma.userCourseContentProgress.create({
+        data: {
+          courseContentId: parseInt(currentVideoId),
+          userId: user?.id,
+          isComplete: true,
+        },
+      })
+
+      revalidatePath(`/learning-mode/${currentVideoId}`)
+    } else {
+      console.log("Already marked as complete")
+    }
+  }
 
   return (
     <div>
@@ -106,9 +151,23 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                     {courseContentData?.attributes.title}
                   </p>
 
-                  <button className="px-4 py-2 border border-primary-border bg-tertiary-base-dark rounded-lg text-secondary-content-dark hover:bg-primary-dark/50 hover:text-white transition-all text-sm">
-                    Complete
-                  </button>
+                  {isCourseCompleted ? (
+                    <Link
+                      href="/learning-mode"
+                      className="px-4 py-2 border border-primary-border bg-tertiary-base-dark rounded-lg text-secondary-content-dark hover:bg-primary-dark/50 hover:text-white transition-all text-sm"
+                    >
+                      Next Course
+                    </Link>
+                  ) : (
+                    <form action={handleComplete}>
+                      <button
+                        type="submit"
+                        className="px-4 py-2 border border-primary-border bg-tertiary-base-dark rounded-lg text-secondary-content-dark hover:bg-primary-dark/50 hover:text-white transition-all text-sm"
+                      >
+                        Complete
+                      </button>
+                    </form>
+                  )}
                 </div>
 
                 <OverviewTab data={courseData} />
@@ -166,7 +225,11 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                   {courseSectionsData.data.length > 0 ? (
                     <>
                       {courseSectionsData.data.map(courseSection => (
-                        <ContentDropdown key={courseSection.id} data={courseSection} />
+                        <ContentDropdown
+                          key={courseSection.id}
+                          data={courseSection}
+                          courseProgress={courseContentProgressResponse}
+                        />
                       ))}
                     </>
                   ) : (
