@@ -1,6 +1,5 @@
 import React from "react"
 import { BootcampCard } from "./_components/bootcamp-card"
-import { Tab, Tabs } from "@/components/tabs"
 import qs from "qs"
 
 import { StrapiResponse } from "@/types/strapi"
@@ -33,7 +32,7 @@ const fetchBootcampsFromStrapi = async (
 
   const query = qs.stringify({
     sort: [`start_date:${orderBy}`],
-    populate: "*",
+    populate: "cover_image,mentors.avatar",
     fields: "*",
     pagination: {
       pageSize: 10,
@@ -60,12 +59,12 @@ const BootcampPage = async ({
   const orderBy = searchParams?.orderBy
   const isExpired = searchParams?.isExpired as unknown as boolean
 
-  const availableBootcampsResponse = await fetchBootcampsFromStrapi(isExpired, title, orderBy)
+  const availableBootcampsResponse = await fetchBootcampsFromStrapi(false, title, orderBy)
   const listAvailableBootcamps = availableBootcampsResponse.data
   const availableBootcampCount = availableBootcampsResponse.meta.pagination
     .total as unknown as string
 
-  const expiredBootcampsResponse = await fetchBootcampsFromStrapi(isExpired, title, orderBy)
+  const expiredBootcampsResponse = await fetchBootcampsFromStrapi(true, title, orderBy)
   const listExpiredBootcamps = expiredBootcampsResponse.data
   const expiredBootcampCount = expiredBootcampsResponse.meta.pagination.total as unknown as string
 
