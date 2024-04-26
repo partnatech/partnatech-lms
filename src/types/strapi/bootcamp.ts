@@ -3,6 +3,10 @@ import { Difficulty } from "./difficulty"
 import { Mentor } from "./mentor"
 
 export type BootcampResponse = DataWrapper<Bootcamp>
+export interface BootcampSchedule {
+  day: string
+  hour: string
+}
 export interface Bootcamp {
   title: string
   cover_image: Image
@@ -22,7 +26,7 @@ export interface Bootcamp {
   list_of_benefits: string[]
   descriptions: string
   location_url: string | null
-  //   schedules: Schedule[]
+  schedules: BootcampSchedule[]
   discussion_url: string
   list_of_skills: string[]
   mentors: {

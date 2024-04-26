@@ -9,9 +9,31 @@ import { CurriculumAccordion } from "../_components/curriculum-accordion"
 import { bootcamp } from "@/lib/constants/bootcamp-detail-sample"
 import CtaCard from "../_components/cta-card"
 import BootcampTags from "../_components/bootcamp-tags"
+import qs from "qs"
+import { StrapiResponse } from "@/types/strapi"
+import { BootcampResponse } from "@/types/strapi/bootcamp"
 
-const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
+const fetchBootcampDetailFromStrapi = async (slug: string) => {
+  let slugTemp = 1
+  const query = qs.stringify({
+    populate: "cover_image,mentors.avatar",
+    fields: "*",
+  })
+
+  const response = await fetch(
+    `${process.env.STRAPI_BASE_URL}/api/bootcamps/${slugTemp}?${query}`,
+    {
+      cache: "no-store",
+    }
+  )
+  const strapiResponse: StrapiResponse<BootcampResponse> = await response.json()
+  return strapiResponse
+}
+
+const BootcampDetailPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params
+  const bootcampResponse = await fetchBootcampDetailFromStrapi(params.slug)
+  const bootcamp = bootcampResponse.data
 
   const pages: BreadcrumbPage[] = [
     { name: "Bootcamp", href: "/dashboard/bootcamp", current: false },
@@ -31,24 +53,25 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
       <div className="flex flex-col gap-6 flex-1">
         <Breadcrumb pages={pages} />
         <BootcampDetailHeader
-          title={bootcamp.title}
-          description={bootcamp.description}
-          period={bootcamp.period}
-          location={bootcamp.location}
-          level={bootcamp.level}
+          title={bootcamp.attributes.title}
+          description={bootcamp.attributes.short_descriptions}
+          startDate={bootcamp.attributes.start_date}
+          endDate={bootcamp.attributes.end_date}
+          location={bootcamp.attributes.type}
+          difficulty={bootcamp.attributes.difficulty}
         />
         <div className="flex flex-col gap-12 sticky top-64">
           <Tabs tabs={tabs} />
           {/* About */}
           <ContentContainer id="about" title="About Bootcamp">
             <p className="text-sm text-secondary-content dark:text-secondary-content-dark">
-              {bootcamp.about}
+              {bootcamp.attributes.descriptions}
             </p>
           </ContentContainer>
           {/* Benefit */}
           <ContentContainer id="benefit" title="Bootcamp Benefit">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {bootcamp.benefits.map((benefit, idx) => (
+              {bootcamp.attributes.list_of_benefits.map((benefit, idx) => (
                 <div
                   key={`benefit-${idx}`}
                   className="flex items-center gap-2 text-sm text-secondary-content dark:text-secondary-content-dark"
@@ -62,25 +85,33 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
           {/* Mentor */}
           <ContentContainer id="mentor" title="Your Mentor">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/*
-              Temporary comment this section, we can enable this after integration using strapi api
-              {bootcamp.mentors.map((mentor, idx) => (
-              <MentorCard key={`mentor-${idx}`} mentorImage={mentor.image} mentorName={mentor.name} mentorDescription={mentor.description} />
-            ))} */}
+              {bootcamp.attributes.mentors.data.map((mentor, idx) => (
+                <MentorCard
+                  key={`mentor-${idx}`}
+                  mentorImage={mentor.attributes.avatar}
+                  mentorSlug={mentor.attributes.slug}
+                  mentorName={mentor.attributes.name}
+                  mentorDescription={mentor.attributes.role}
+                />
+              ))}
             </div>
           </ContentContainer>
           {/* Schedule */}
           <ContentContainer id="schedule" title="Schedule, Location & Group">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <ScheduleCards {...bootcamp.scheduleDetail} />
+              <ScheduleCards
+                startDate={bootcamp.attributes.start_date}
+                endDate={bootcamp.attributes.end_date}
+                schedules={bootcamp.attributes.schedules}
+              />
             </div>
           </ContentContainer>
           {/* Curriculum */}
           <ContentContainer id="curriculum" title="Curriculum">
             <div className="space-y-6">
-              {bootcamp.curriculums.map((curriculum, idx) => (
+              {/* {bootcamp.curriculums.map((curriculum, idx) => (
                 <CurriculumAccordion key={`curriculum-${idx}`} {...curriculum} />
-              ))}
+              ))} TO DO : add curriculums */}
             </div>
           </ContentContainer>
         </div>
@@ -88,17 +119,17 @@ const BootcampDetailPage = ({ params }: { params: { slug: string } }) => {
       {/* Right Pane Placeholder */}
       <div className="sticky top-24 hidden w-96 shrink-0 lg:block space-y-6">
         <CtaCard
-          imageUrl={bootcamp.headerImage}
-          price={bootcamp.price}
-          discountPrice={bootcamp.discountPrice}
-          quota={bootcamp.quota}
-          enrolled={bootcamp.enrolled}
+          imageUrl={bootcamp.attributes.cover_image}
+          price={bootcamp.attributes.price}
+          discountPrice={bootcamp.attributes.discount_price}
+          quota={bootcamp.attributes.quota}
+          enrolled={bootcamp.attributes.quota} // TO DO : update enrolled when integrating to supabase
         />
         <div className="space-y-4">
           <p className="text-lg font-medium text-primary-content dark:text-primary-content-dark">
             Skill you&apos;ll gain
           </p>
-          <BootcampTags tags={bootcamp.tags} />
+          <BootcampTags tags={bootcamp.attributes.list_of_skills} />
         </div>
       </div>
     </div>

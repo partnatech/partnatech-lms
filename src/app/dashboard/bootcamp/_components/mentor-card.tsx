@@ -17,11 +17,11 @@ export const MentorCard = (props: MentorCardProps) => {
         className="p-4 last:border-none border-b border-primary-border flex items-center gap-3 group"
       >
         <div className="flex items-center gap-4 p-4 bg-secondary-base dark:bg-secondary-base-dark border border-primary-border rounded-lg">
-          {/* <img
-          className="inline-block h-10 w-10 rounded-full"
-          src={`${process.env.STRAPI_BASE_URL}${props.mentorImage.data.attributes.url}`}
-          alt={`${props.mentorName} Image`}
-        /> */}
+          <img
+            className="inline-block h-10 w-10 rounded-full"
+            src={`${process.env.STRAPI_BASE_URL}${props.mentorImage.data.attributes.url}`}
+            alt={`${props.mentorName} Image`}
+          />
           <div>
             <div className="text-base font-medium text-primary-content dark:text-primary-content-dark">
               {props.mentorName}
