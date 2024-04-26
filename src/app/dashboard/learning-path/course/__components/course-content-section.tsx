@@ -14,7 +14,6 @@ interface CourseContentSectionProps {
 }
 
 const CourseContentSection = ({ data }: CourseContentSectionProps) => {
-  console.log("🚀 ~ CourseContentSection ~ data:", data)
   return (
     <Disclosure>
       {({ open }) => (
