@@ -36,9 +36,9 @@ const CtaCard = (props: CtaCardProps) => {
         </div>
         {/* Quota */}
         <div className="flex flex-col gap-3">
-          <ProgressIndicator percentage={(enrolled / quota) * 100} />
+          <ProgressIndicator percentage={(Number(enrolled) / Number(quota)) * 100} />
           <p className="text-xs text-primary-content dark:text-primary-content-dark">
-            Quota peserta terisi {Math.round((enrolled / quota) * 100)}%
+            Quota peserta terisi {Math.round((Number(enrolled) / Number(quota)) * 100)}%
           </p>
         </div>
         {/* Contact Button */}
