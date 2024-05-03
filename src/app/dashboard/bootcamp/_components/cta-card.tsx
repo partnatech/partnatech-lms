@@ -3,6 +3,7 @@ import { Image } from "@/types/strapi"
 import { AcademicCapIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/16/solid"
 
 type CtaCardProps = {
+  slug: string
   price: number
   discountPrice?: number | null
   quota: number | string
@@ -11,7 +12,7 @@ type CtaCardProps = {
 }
 
 const CtaCard = (props: CtaCardProps) => {
-  const { price, discountPrice, quota, enrolled, imageUrl } = props
+  const { slug, price, discountPrice, quota, enrolled, imageUrl } = props
 
   return (
     <div className="max-w-sm border border-primary-border rounded-lg overflow-hidden">
@@ -53,7 +54,7 @@ const CtaCard = (props: CtaCardProps) => {
         {enrolled < quota && (
           <a
             className="flex justify-center items-center gap-2 w-full py-2 text-sm bg-gradient-to-b from-emerald-400 to-emerald-600 dark:from-teal-500 dark:to-teal-700 text-primary-content dark:text-primary-content-dark border border-emerald-600 dark:border-teal-700 rounded-lg"
-            href="#"
+            href={`/dashboard/bootcamp/${slug}/enroll`}
           >
             <AcademicCapIcon className="w-5 h-5" />
             Enroll Bootcamp
