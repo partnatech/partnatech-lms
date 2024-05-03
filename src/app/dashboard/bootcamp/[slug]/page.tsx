@@ -119,11 +119,12 @@ const BootcampDetailPage = async ({ params }: { params: { slug: string } }) => {
       {/* Right Pane Placeholder */}
       <div className="sticky top-24 hidden w-96 shrink-0 lg:block space-y-6">
         <CtaCard
+          slug={bootcamp.attributes.slug}
           imageUrl={bootcamp.attributes.cover_image}
           price={bootcamp.attributes.price}
           discountPrice={bootcamp.attributes.discount_price}
           quota={bootcamp.attributes.quota}
-          enrolled={bootcamp.attributes.quota} // TO DO : update enrolled when integrating to supabase
+          enrolled={29} // TO DO : update enrolled when integrating to supabase
         />
         <div className="space-y-4">
           <p className="text-lg font-medium text-primary-content dark:text-primary-content-dark">
