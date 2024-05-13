@@ -17,26 +17,28 @@ export interface StrapiResponse<T> {
   }
 }
 
-export interface Image {
-  data: {
-    id: number
-    attributes: {
-      name: string
-      alternativeText: any
-      caption: any
-      width: number
-      height: number
-      formats: any
-      hash: string
-      ext: string
-      mime: string
-      size: number
-      url: string
-      previewUrl: string
-      provider: string
-      provider_metadata: any
-      createdAt: string
-      updatedAt: string
-    }
+export interface File {
+  id: number
+  attributes: {
+    name: string
+    alternativeText: any
+    caption: any
+    width: number
+    height: number
+    formats: any
+    hash: string
+    ext: string
+    mime: string
+    size: number
+    url: string
+    previewUrl: string
+    provider: string
+    provider_metadata: any
+    createdAt: string
+    updatedAt: string
   }
+}
+
+export interface Image {
+  data: File
 }

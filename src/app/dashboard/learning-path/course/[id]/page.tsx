@@ -6,12 +6,31 @@ import qs from "qs"
 import React from "react"
 import { HiOutlineCalendar } from "react-icons/hi"
 import { format } from "date-fns"
-import { formatDuration } from "@/utils/number"
+import { formatDuration, formatRupiah } from "@/utils/number"
 import TabButtonGroup from "../__components/tab-button-group"
 import { FaCheck, FaClock, FaGraduationCap, FaStar, FaVideo } from "react-icons/fa6"
 import { HiMiniArrowUpRight } from "react-icons/hi2"
 import CourseContentSection from "../__components/course-content-section"
 import { cn } from "@/utils/cn"
+import UnlockLearningPathButton from "../../__components/unlock-learning-path-button"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { CategoryResponse } from "@/types/strapi/category"
+import { prisma } from "@/lib/prisma"
+
+const fetchCategoryFromStrapi = async (id: string) => {
+  const query = qs.stringify({
+    populate:
+      "courses,subscriptions&select=name,icon,subscriptions,courses,courses.cover_images,mentors,mentors.avatar",
+    fields: "*",
+  })
+
+  const response = await fetch(`${process.env.STRAPI_BASE_URL}/api/categories/${id}?${query}`, {
+    cache: "no-store",
+  })
+  const strapiResponse: StrapiResponse<CategoryResponse> = await response.json()
+  return strapiResponse
+}
 
 const fetchCourseFromStrapi = async (id: string) => {
   const query = qs.stringify({
@@ -55,7 +74,44 @@ const fetchOtherCourseFromStrapi = async (categoryId: number, currentCourseId: n
   return strapiResponse
 }
 
+const fetchUserSubscription = async (userId: string) => {
+  if (!userId) return
+
+  const response = await prisma.userSubscription.findMany({
+    where: {
+      userId,
+    },
+  })
+  return response
+}
+
+const fetchCategoryProgress = async (userId: string, categoryId: number) => {
+  if (!userId) return
+
+  const response = await prisma.userCategoryProgress.findFirst({
+    where: {
+      userId,
+      categoryId,
+    },
+  })
+  return response
+}
+
 const CoursePage = async ({ params }: { params: { id: string } }) => {
+  const session = await getServerSession(authOptions)
+  const user = session?.user
+
+  const categoryResponse = await fetchCategoryFromStrapi(params.id)
+  const subscriptionList = categoryResponse.data.attributes.subscriptions.data
+
+  const listOfPrice = subscriptionList.map(subscription => {
+    if (subscription.attributes.discount_price) return subscription.attributes.discount_price
+
+    return subscription.attributes.price
+  })
+  const lowestPrice = Math.min(...listOfPrice)
+  console.log("🚀 ~ CoursePage ~ lowestPrice:", lowestPrice)
+
   const courseResponse = await fetchCourseFromStrapi(params.id)
   const courseData = courseResponse.data
 
@@ -66,6 +122,77 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
 
   const otherCourseResponse = await fetchOtherCourseFromStrapi(categoryData.id, courseData.id)
   const otherCourseData = otherCourseResponse.data
+
+  const categoryProgressResponse = await fetchCategoryProgress(user?.id ?? "", parseInt(params.id))
+
+  const userSubscriptionResponse = await fetchUserSubscription(user?.id ?? "")
+  const isUserSubscribed = userSubscriptionResponse?.find(
+    item => item.categoryId === parseInt(params.id)
+  )
+
+  const actionComponentRenderer = () => {
+    if (!isUserSubscribed) {
+      return (
+        <div className="border border-primary-border bg-secondary-base-dark rounded-lg">
+          <div className="bg-tertiary-base-dark p-4">
+            <p className="text-secondary-content-dark text-center">
+              Unlock all <span className="text-primary-dark">{categoryData.attributes.title}</span>{" "}
+              learning path start from only{" "}
+              <span className="text-white">{formatRupiah(lowestPrice)} / month</span>
+            </p>
+          </div>
+          <div className="p-4 flex flex-col gap-4">
+            <UnlockLearningPathButton
+              userData={user}
+              categoryData={categoryResponse}
+              data={subscriptionList}
+            />
+          </div>
+        </div>
+      )
+    }
+
+    if (categoryProgressResponse?.isComplete) {
+      return (
+        <div className="border border-primary-border bg-secondary-base-dark rounded-lg">
+          <div className="bg-tertiary-base-dark p-4">
+            <p className="text-secondary-content-dark text-center text-sm">
+              Congratulations! You already finished this course. <br></br>
+              Click button below to view your certificate of completion.
+            </p>
+          </div>
+          <div className="p-4 flex flex-col gap-4">
+            <Link
+              href={categoryProgressResponse?.certificateUrl ?? ""}
+              className="w-full py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center justify-center gap-2"
+            >
+              View Certificate
+            </Link>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="border border-primary-border bg-secondary-base-dark rounded-lg">
+          <div className="bg-tertiary-base-dark p-4">
+            <p className="text-secondary-content-dark text-center text-sm">
+              Click button below to continue your learning progress and gain your certificate
+              sooner!
+            </p>
+          </div>
+          <div className="p-4 flex flex-col gap-4">
+            <Link
+              href={`/learning-mode/${categoryResponse.data.id}`}
+              className="w-full py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center justify-center gap-2"
+            >
+              <FaGraduationCap className="w-5 h-5" />
+              <p>Continue Learning</p>
+            </Link>
+          </div>
+        </div>
+      )
+    }
+  }
 
   return (
     <div className="flex flex-col gap-[64px]">
@@ -257,22 +384,7 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
             </div>
 
             {/* Unlock Learning Path */}
-            <div className="border border-primary-border bg-secondary-base-dark rounded-lg">
-              <div className="bg-tertiary-base-dark p-4">
-                <p className="text-secondary-content-dark text-center">
-                  Unlock all{" "}
-                  <span className="text-primary-dark">{categoryData.attributes.title}</span>{" "}
-                  learning path start from only{" "}
-                  <span className="text-white">Rp250.000 / month</span>
-                </p>
-              </div>
-              <div className="p-4 flex flex-col gap-4">
-                <button className="w-full py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center justify-center gap-2">
-                  <FaGraduationCap className="w-5 h-5" />
-                  <p>Unlock Learning Path</p>
-                </button>
-              </div>
-            </div>
+            {actionComponentRenderer()}
           </div>
         </div>
       </div>

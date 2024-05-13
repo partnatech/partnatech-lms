@@ -1,12 +1,16 @@
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 import { DataWrapper, StrapiResponse } from "@/types/strapi"
 import { CategoryResponse } from "@/types/strapi/category"
 import { Course } from "@/types/strapi/course"
 import { formatDuration } from "@/utils/number"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
 import qs from "qs"
 import React from "react"
 import { FaArrowLeft, FaCheck, FaClock, FaGraduationCap, FaVideo } from "react-icons/fa6"
 import DifficulityIcon from "../../../../components/difficulity-icon"
+import UnlockLearningPathButton from "../__components/unlock-learning-path-button"
 
 interface CourseCardProps {
   data: DataWrapper<Course>
@@ -65,7 +69,8 @@ const CourseCard = ({ data, index, isLastItem }: CourseCardProps) => {
 
 const fetchCategoryFromStrapi = async (id: string) => {
   const query = qs.stringify({
-    populate: "courses&select=name,icon,courses,courses.cover_images,mentors,mentors.avatar",
+    populate:
+      "courses,subscriptions&select=name,icon,subscriptions,courses,courses.cover_images,mentors,mentors.avatar",
     fields: "*",
   })
 
@@ -76,10 +81,77 @@ const fetchCategoryFromStrapi = async (id: string) => {
   return strapiResponse
 }
 
+const fetchCategoryProgress = async (userId: string, categoryId: number) => {
+  if (!userId) return
+
+  const response = await prisma.userCategoryProgress.findFirst({
+    where: {
+      userId,
+      categoryId,
+    },
+  })
+  return response
+}
+
+const fetchUserSubscription = async (userId: string) => {
+  if (!userId) return
+
+  const response = await prisma.userSubscription.findMany({
+    where: {
+      userId,
+    },
+  })
+  return response
+}
+
 const LearningPathDetail = async ({ params }: { params: { id: string } }) => {
+  const session = await getServerSession(authOptions)
+  const user = session?.user
+
   const categoryResponse = await fetchCategoryFromStrapi(params.id)
   const courseList = categoryResponse.data.attributes.courses.data
   const mentorList = categoryResponse.data.attributes.mentors.data
+  const subscriptionList = categoryResponse.data.attributes.subscriptions.data
+
+  const categoryProgressResponse = await fetchCategoryProgress(user?.id ?? "", parseInt(params.id))
+
+  const userSubscriptionResponse = await fetchUserSubscription(user?.id ?? "")
+  const isUserSubscribed = userSubscriptionResponse?.find(
+    item => item.categoryId === parseInt(params.id)
+  )
+
+  const actionButtonRenderer = () => {
+    if (!isUserSubscribed) {
+      return (
+        <UnlockLearningPathButton
+          userData={user}
+          categoryData={categoryResponse}
+          data={subscriptionList}
+        />
+      )
+    }
+
+    if (categoryProgressResponse?.isComplete) {
+      return (
+        <Link
+          href={categoryProgressResponse?.certificateUrl ?? ""}
+          className="w-full py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center justify-center gap-2"
+        >
+          View Certificate
+        </Link>
+      )
+    } else {
+      return (
+        <Link
+          href={`/learning-mode/${categoryResponse.data.id}`}
+          className="w-full py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center justify-center gap-2"
+        >
+          <FaGraduationCap className="w-5 h-5" />
+          <p>Continue Learning</p>
+        </Link>
+      )
+    }
+  }
 
   return (
     <div className="flex flex-col gap-12">
@@ -120,10 +192,7 @@ const LearningPathDetail = async ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-      <button className="w-max py-3 px-4 text-sm rounded-lg bg-gradient-to-b from-[#14B8A6] to-[#0F766E] text-white flex items-center gap-2">
-        <FaGraduationCap className="w-5 h-5" />
-        <p>Unlock Learning Path</p>
-      </button>
+      <div className="w-[220px]">{actionButtonRenderer()}</div>
 
       {/* Course List */}
       <div className="grid grid-cols-12 gap-6">

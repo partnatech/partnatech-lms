@@ -26,3 +26,22 @@ export function formatMillisecondsToMMSS(milliseconds: number) {
 
   return formatted
 }
+
+export function formatMillisecondsToMonths(milliseconds: number) {
+  // Define an average month length in milliseconds (30 days)
+  const averageMonthMilliseconds = 30 * 24 * 60 * 60 * 1000
+
+  // Calculate the approximate number of months
+  const months = milliseconds / averageMonthMilliseconds
+
+  return Math.floor(months)
+}
+
+export function formatRupiah(amount: number) {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  })
+    .format(amount)
+    .replace(",00", "")
+}

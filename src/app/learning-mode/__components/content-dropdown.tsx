@@ -1,7 +1,7 @@
 "use client"
 
 import { DataWrapper } from "@/types/strapi"
-import { CourseSection } from "@/types/strapi/course"
+import { Course, CourseSection } from "@/types/strapi/course"
 import { cn } from "@/utils/cn"
 import { Disclosure } from "@headlessui/react"
 import Link from "next/link"
@@ -9,20 +9,28 @@ import { useSearchParams } from "next/navigation"
 import React, { useMemo } from "react"
 import { FaChevronDown, FaVideo } from "react-icons/fa6"
 import type { UserCourseContentProgress } from "@prisma/client"
+import { formatDuration } from "@/utils/number"
 
 interface ContentDropdownProps {
   data: DataWrapper<CourseSection>
   courseProgress?: UserCourseContentProgress[]
+  courseData: DataWrapper<Course>
+  isOpen: boolean
 }
 
-const ContentDropdown = ({ data, courseProgress }: ContentDropdownProps) => {
-  console.log("🚀 ~ ContentDropdown ~ courseProgress:", courseProgress)
+const ContentDropdown = ({ data, courseProgress, courseData, isOpen }: ContentDropdownProps) => {
   const searchParams = useSearchParams()
 
   const currentVideo = searchParams.get("currentVideo")
 
+  const listOfContentId = data.attributes.course_content_items.data.map(item => item.id)
+  const completedContentCount = courseProgress?.filter(item =>
+    listOfContentId.includes(item.courseContentId)
+  ).length
+  const totalContentCount = data.attributes.course_content_items.data.length
+
   return (
-    <Disclosure defaultOpen={currentVideo === data.id.toString()}>
+    <Disclosure defaultOpen={isOpen}>
       {({ open }) => (
         <div>
           <Disclosure.Button
@@ -37,7 +45,9 @@ const ContentDropdown = ({ data, courseProgress }: ContentDropdownProps) => {
                   {data.attributes.title}
                 </p>
                 <div className="flex items-center text-sm text-secondary-content-dark gap-1">
-                  <p>0/3 Lectures</p>
+                  <p>
+                    {completedContentCount}/{totalContentCount} Lectures
+                  </p>
                   <p>•</p>
                   <p>15m</p>
                 </div>
@@ -58,9 +68,11 @@ const ContentDropdown = ({ data, courseProgress }: ContentDropdownProps) => {
                     item => item.courseContentId === course.id
                   )?.isComplete
 
+                  console.log("isCompleted", isCompleted, course.id)
+
                   return (
                     <Link
-                      href={`/learning-mode/${data.id}?currentVideo=${course.id}`}
+                      href={`/learning-mode/${courseData.id}/${data.id}?currentVideo=${course.id}`}
                       className={cn(
                         currentVideo === course.id.toString()
                           ? "bg-primary-dark/5"
@@ -81,7 +93,7 @@ const ContentDropdown = ({ data, courseProgress }: ContentDropdownProps) => {
 
                         <div className="flex items-center gap-2">
                           <FaVideo className="text-secondary-content-dark" />
-                          <p className="text-sm">5 Min</p>
+                          <p className="text-sm">{formatDuration(course.attributes.duration)}</p>
                         </div>
                       </div>
 

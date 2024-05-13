@@ -12,10 +12,11 @@ import { FaCheck, FaTrophy, FaUserGroup } from "react-icons/fa6"
 import ContentDropdown from "../__components/content-dropdown"
 import OverviewTab from "../__components/overview-tab"
 import { revalidatePath } from "next/cache"
+import NextCourseButton from "../__components/next-course-button"
 
 interface LearningModeProps {
   params: {
-    id: string
+    id: string[]
   }
   searchParams: { [key: string]: string | string[] | undefined }
 }
@@ -44,7 +45,7 @@ const fetchCourseContentFromStrapi = async (id: string) => {
   if (!id) return
 
   const query = qs.stringify({
-    populate: "*",
+    populate: ["resource_files", "snippet_code_list"],
     fields: "*",
   })
 
@@ -58,14 +59,13 @@ const fetchCourseContentFromStrapi = async (id: string) => {
   return strapiResponse
 }
 
-const fetchCourseContentProgress = async (contentId: string, userId: string) => {
-  if (!contentId || !userId) return
+const fetchCourseContentProgress = async (userId: string, courseId: number) => {
+  if (!userId) return
 
-  const parsedContentId = parseInt(contentId)
   const response = await prisma.userCourseContentProgress.findMany({
     where: {
-      courseContentId: parsedContentId,
       userId,
+      courseId,
     },
   })
   return response
@@ -73,24 +73,53 @@ const fetchCourseContentProgress = async (contentId: string, userId: string) => 
 
 const LearningModePage = async ({ params, searchParams }: LearningModeProps) => {
   const currentVideoId = searchParams.currentVideo as string
+  const courseId = params.id[0]
+  const courseSectionId = params.id[1]
+
   const session = await getServerSession(authOptions)
   const user = session?.user
 
-  const courseResponse = await fetchCourseFromStrapi(params.id)
+  /* Course Data */
+  const courseResponse = await fetchCourseFromStrapi(courseId)
   const courseData = courseResponse.data
   const courseSectionsData = courseData.attributes.course_sections
   const mentorsData = courseData.attributes.mentors
+  const categoryData = courseData.attributes.category
 
+  /* Get current course section */
+  const currentCourseSectionData = courseSectionsData.data.find(
+    section => section.id === parseInt(courseSectionId)
+  )
+
+  /* Get Video Length */
+  let courseContentNameList: string[] = []
+
+  courseSectionsData.data.forEach(section => {
+    section.attributes.course_content_items.data.forEach(content => {
+      courseContentNameList.push(content.attributes.title)
+    })
+  })
+
+  /* Get current content by id */
   const courseContentResponse = await fetchCourseContentFromStrapi(currentVideoId)
   const courseContentData = courseContentResponse?.data
+  console.log("🚀 ~ LearningModePage ~ courseContentData:", courseContentData)
 
+  /* Get all course content progress */
   const courseContentProgressResponse = await fetchCourseContentProgress(
-    currentVideoId,
-    user?.id ?? ""
+    user?.id ?? "",
+    parseInt(courseId)
   )
   const isCourseCompleted = courseContentProgressResponse?.find(
     item => item.courseContentId === parseInt(currentVideoId)
   )?.isComplete
+
+  /* Get next content id */
+  let nextContentId: number | null = null
+
+  const currentIndex = courseSectionsData.data.findIndex(
+    item => item.id === parseInt(currentVideoId)
+  )
 
   const handleComplete = async () => {
     "use server"
@@ -104,7 +133,9 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
     if (!response) {
       await prisma.userCourseContentProgress.create({
         data: {
+          courseId: parseInt(courseId),
           courseContentId: parseInt(currentVideoId),
+          categoryId: categoryData.data.id,
           userId: user?.id,
           isComplete: true,
         },
@@ -120,7 +151,9 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
     <div>
       <nav className="bg-primary-base-dark p-8 fixed top-0 w-full flex items-center justify-between h-[86px] border-b border-secondary-border z-50">
         <div className="flex items-center gap-6">
-          <Logo />
+          <Link href="/dashboard/my-learning">
+            <Logo />
+          </Link>
 
           <div className="h-[38px] w-[2px] bg-secondary-border"></div>
 
@@ -152,12 +185,7 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                   </p>
 
                   {isCourseCompleted ? (
-                    <Link
-                      href="/learning-mode"
-                      className="px-4 py-2 border border-primary-border bg-tertiary-base-dark rounded-lg text-secondary-content-dark hover:bg-primary-dark/50 hover:text-white transition-all text-sm"
-                    >
-                      Next Course
-                    </Link>
+                    <NextCourseButton courseSectionList={courseSectionsData.data} />
                   ) : (
                     <form action={handleComplete}>
                       <button
@@ -170,7 +198,12 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                   )}
                 </div>
 
-                <OverviewTab data={courseData} />
+                <OverviewTab
+                  data={courseData}
+                  resourceFilesData={courseContentData.attributes.resource_files.data}
+                  snippetCodeListData={courseContentData.attributes.snippet_code_list}
+                  externalReferenceData={courseContentData.attributes.external_reference}
+                />
               </div>
             ) : (
               <div className="col-span-9">
@@ -185,41 +218,49 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
               <div className="flex flex-col gap-6">
                 <p className="text-2xl font-semibold">Learning Path Content</p>
 
-                <div className="flex items-center gap-4">
-                  {/* Radial Progress */}
-                  <div className="relative w-12 h-12">
-                    <svg className="w-full h-full" viewBox="0 0 100 100">
-                      <circle
-                        className="text-tertiary-base-dark stroke-current"
-                        stroke-width="6"
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        fill="transparent"
-                      ></circle>
+                {courseContentProgressResponse && (
+                  <div className="flex items-center gap-4">
+                    {/* Radial Progress */}
+                    <div className="relative w-12 h-12">
+                      <svg className="w-full h-full" viewBox="0 0 100 100">
+                        <circle
+                          className="text-tertiary-base-dark stroke-current"
+                          stroke-width="6"
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="transparent"
+                        ></circle>
 
-                      <circle
-                        className="text-primary-dark progress-ring__circle stroke-current"
-                        stroke-width="6"
-                        stroke-linecap="round"
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        fill="transparent"
-                        stroke-dasharray="251.2"
-                        stroke-dashoffset="calc(251.2 - (251.2 * 70) / 100)"
-                      ></circle>
-                    </svg>
-                    <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full">
-                      <FaTrophy className="text-primary-dark" />
+                        <circle
+                          className="text-primary-dark progress-ring__circle stroke-current"
+                          stroke-width="6"
+                          stroke-linecap="round"
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="transparent"
+                          stroke-dasharray="251.2"
+                          stroke-dashoffset={`calc(251.2 - (251.2 * ${
+                            (courseContentProgressResponse.length / courseContentNameList.length) *
+                            100
+                          }) / 100)`}
+                        ></circle>
+                      </svg>
+                      <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full">
+                        <FaTrophy className="text-primary-dark" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-secondary-content-dark mb-1">Your Progress</p>
+                      <p className="text-sm">
+                        {courseContentProgressResponse.length}/{courseContentNameList.length}{" "}
+                        Lessons Completed
+                      </p>
                     </div>
                   </div>
-
-                  <div>
-                    <p className="text-xs text-secondary-content-dark mb-1">Your Progress</p>
-                    <p className="text-sm">4/15 Lessons Completed</p>
-                  </div>
-                </div>
+                )}
 
                 <div className="flex flex-col gap-4">
                   {courseSectionsData.data.length > 0 ? (
@@ -229,6 +270,8 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                           key={courseSection.id}
                           data={courseSection}
                           courseProgress={courseContentProgressResponse}
+                          courseData={courseData}
+                          isOpen={courseSection.id === parseInt(courseSectionId)}
                         />
                       ))}
                     </>
@@ -266,7 +309,7 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                       </Link>
                     ))}
 
-                    <div className="p-4 flex items-center justify-between">
+                    {/* <div className="p-4 flex items-center justify-between">
                       <div className="flex items-center gap-2 text-secondary-content-dark">
                         <FaUserGroup />
                         <p className="text-sm">1x Free Quota</p>
@@ -275,7 +318,7 @@ const LearningModePage = async ({ params, searchParams }: LearningModeProps) => 
                       <button className="border border-primary-dark bg-primary-dark/20 hover:bg-primary-dark/50 transition-all rounded-lg px-4 py-2 text-sm">
                         Set Schedule
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
